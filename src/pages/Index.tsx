@@ -1123,7 +1123,7 @@ const Connectify = () => {
                     <SelectValue placeholder="All industries" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Industries</SelectItem>
+                    <SelectItem value="all">All Industries</SelectItem>
                     {Array.from(new Set(mockAlumni.map(a => a.industry))).map(industry => (
                       <SelectItem key={industry} value={industry}>{industry}</SelectItem>
                     ))}
