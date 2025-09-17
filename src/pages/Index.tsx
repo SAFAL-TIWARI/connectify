@@ -470,30 +470,34 @@ const Connectify = () => {
           </div>
           
           <div className="hidden md:flex items-center space-x-8">
-            <button 
-              onClick={() => setCurrentPage('home')}
-              className={`text-sm font-medium transition-colors hover:text-primary ${currentPage === 'home' ? 'text-primary' : 'text-muted-foreground'}`}
-            >
-              Home
-            </button>
-            <button 
-              onClick={() => setCurrentPage('alumni')}
-              className={`text-sm font-medium transition-colors hover:text-primary ${currentPage === 'alumni' ? 'text-primary' : 'text-muted-foreground'}`}
-            >
-              Alumni Directory
-            </button>
-            <button 
-              onClick={() => setCurrentPage('events')}
-              className={`text-sm font-medium transition-colors hover:text-primary ${currentPage === 'events' ? 'text-primary' : 'text-muted-foreground'}`}
-            >
-              Events
-            </button>
-            <button 
-              onClick={() => setCurrentPage('careers')}
-              className={`text-sm font-medium transition-colors hover:text-primary ${currentPage === 'careers' ? 'text-primary' : 'text-muted-foreground'}`}
-            >
-              Career Hub
-            </button>
+            {user && (
+              <>
+                <button 
+                  onClick={() => setCurrentPage('home')}
+                  className={`text-sm font-medium transition-colors hover:text-primary ${currentPage === 'home' ? 'text-primary' : 'text-muted-foreground'}`}
+                >
+                  Home
+                </button>
+                <button 
+                  onClick={() => setCurrentPage('alumni')}
+                  className={`text-sm font-medium transition-colors hover:text-primary ${currentPage === 'alumni' ? 'text-primary' : 'text-muted-foreground'}`}
+                >
+                  Alumni Directory
+                </button>
+                <button 
+                  onClick={() => setCurrentPage('events')}
+                  className={`text-sm font-medium transition-colors hover:text-primary ${currentPage === 'events' ? 'text-primary' : 'text-muted-foreground'}`}
+                >
+                  Events
+                </button>
+                <button 
+                  onClick={() => setCurrentPage('careers')}
+                  className={`text-sm font-medium transition-colors hover:text-primary ${currentPage === 'careers' ? 'text-primary' : 'text-muted-foreground'}`}
+                >
+                  Career Hub
+                </button>
+              </>
+            )}
           </div>
 
           <div className="flex items-center space-x-4">
