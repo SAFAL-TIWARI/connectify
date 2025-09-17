@@ -259,11 +259,11 @@ const Connectify = () => {
   
   // Filter and Search State
   const [alumniSearchTerm, setAlumniSearchTerm] = useState('');
-  const [alumniFilterYear, setAlumniFilterYear] = useState('');
-  const [alumniFilterMajor, setAlumniFilterMajor] = useState('');
-  const [alumniFilterIndustry, setAlumniFilterIndustry] = useState('');
+  const [alumniFilterYear, setAlumniFilterYear] = useState('all');
+  const [alumniFilterMajor, setAlumniFilterMajor] = useState('all');
+  const [alumniFilterIndustry, setAlumniFilterIndustry] = useState('all');
   const [jobSearchTerm, setJobSearchTerm] = useState('');
-  const [jobFilterType, setJobFilterType] = useState('');
+  const [jobFilterType, setJobFilterType] = useState('all');
   
   // Chatbot State
   const [showChat, setShowChat] = useState(false);
@@ -364,9 +364,9 @@ const Connectify = () => {
       const matchesSearch = alumni.name.toLowerCase().includes(alumniSearchTerm.toLowerCase()) ||
                           alumni.company.toLowerCase().includes(alumniSearchTerm.toLowerCase()) ||
                           alumni.position.toLowerCase().includes(alumniSearchTerm.toLowerCase());
-      const matchesYear = !alumniFilterYear || alumni.graduationYear.toString() === alumniFilterYear;
-      const matchesMajor = !alumniFilterMajor || alumni.major === alumniFilterMajor;
-      const matchesIndustry = !alumniFilterIndustry || alumni.industry === alumniFilterIndustry;
+      const matchesYear = alumniFilterYear === 'all' || !alumniFilterYear || alumni.graduationYear.toString() === alumniFilterYear;
+      const matchesMajor = alumniFilterMajor === 'all' || !alumniFilterMajor || alumni.major === alumniFilterMajor;
+      const matchesIndustry = alumniFilterIndustry === 'all' || !alumniFilterIndustry || alumni.industry === alumniFilterIndustry;
       
       return matchesSearch && matchesYear && matchesMajor && matchesIndustry;
     });
@@ -377,7 +377,7 @@ const Connectify = () => {
       const matchesSearch = job.title.toLowerCase().includes(jobSearchTerm.toLowerCase()) ||
                           job.company.toLowerCase().includes(jobSearchTerm.toLowerCase()) ||
                           job.location.toLowerCase().includes(jobSearchTerm.toLowerCase());
-      const matchesType = !jobFilterType || job.type === jobFilterType;
+      const matchesType = jobFilterType === 'all' || !jobFilterType || job.type === jobFilterType;
       
       return matchesSearch && matchesType;
     });
@@ -1095,7 +1095,7 @@ const Connectify = () => {
                     <SelectValue placeholder="All years" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Years</SelectItem>
+                    <SelectItem value="all">All Years</SelectItem>
                     {Array.from(new Set(mockAlumni.map(a => a.graduationYear))).sort().map(year => (
                       <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
                     ))}
@@ -1109,7 +1109,7 @@ const Connectify = () => {
                     <SelectValue placeholder="All majors" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Majors</SelectItem>
+                    <SelectItem value="all">All Majors</SelectItem>
                     {Array.from(new Set(mockAlumni.map(a => a.major))).map(major => (
                       <SelectItem key={major} value={major}>{major}</SelectItem>
                     ))}
@@ -1577,7 +1577,7 @@ const Connectify = () => {
                     <SelectValue placeholder="All types" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Types</SelectItem>
+                    <SelectItem value="all">All Types</SelectItem>
                     <SelectItem value="Full-time">Full-time</SelectItem>
                     <SelectItem value="Part-time">Part-time</SelectItem>
                     <SelectItem value="Internship">Internship</SelectItem>
