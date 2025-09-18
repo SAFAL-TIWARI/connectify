@@ -8,6 +8,7 @@ Connectify is a modern, feature-rich web application designed to build and foste
 - **Events & Campaigns:** Keep track of upcoming events, webinars, and campaigns. Users can create and manage their own events.
 - **Career Opportunities:** A dedicated section for posting and finding job opportunities, internships, and career advice.
 - **Mentorship Program:** A platform for experienced professionals to mentor students and young alumni, fostering growth and knowledge sharing.
+- **Community Forum (Samvad):** A discussion platform for sharing knowledge, asking questions, and engaging with the community through posts, Q&A, and topic-based discussions.
 - **AI Assistant:** An intelligent chatbot to assist users in navigating the platform and finding information quickly.
 - **User Profiles:** Rich user profiles with options to showcase skills, experience, and interests.
 - **Secure Authentication:** Robust and secure user authentication system for login and registration.
@@ -30,13 +31,13 @@ To get a local copy up and running, follow these simple steps.
 
 ### Prerequisites
 
-Make sure you have [Node.js](https://nodejs.org/en/) and [npm](https://www.npmjs.com/) (or [Bun](https://bun.sh/)) installed on your machine.
+Make sure you have [Node.js](https://nodejs.org/en/) and [npm](https://www.npmjs.com/)  installed on your machine.
 
 ### Installation
 
 1.  **Clone the repository:**
     ```sh
-    git clone https://github.com/SakarRanat90/connectify.git
+    git clone https://github.com/SAFAL-TIWARI/connectify
     ```
 2.  **Navigate to the project directory:**
     ```sh
