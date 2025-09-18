@@ -24,7 +24,7 @@ const mockEvents = [
   {
     id: 1,
     title: "Annual Alumni Networking Gala",
-    date: "2024-03-15",
+    date: "2025-03-15",
     time: "6:00 PM - 10:00 PM",
     location: "Taj Palace, New Delhi",
     description: "Join us for an evening of networking, reconnecting, and celebrating our alumni community. This year's gala features keynote speakers from various industries, live entertainment, and plenty of opportunities to make new connections.",
@@ -39,7 +39,7 @@ const mockEvents = [
   {
     id: 2,
     title: "Tech Talk: AI in Modern Business",
-    date: "2024-02-28",
+    date: "2025-02-28",
     time: "7:00 PM - 9:00 PM",
     location: "IIT Bombay Auditorium",
     description: "A fascinating discussion on how artificial intelligence is transforming various industries. Led by alumni working at top tech companies in India.",
@@ -54,7 +54,7 @@ const mockEvents = [
   {
     id: 3,
     title: "Career Development Workshop",
-    date: "2024-01-20",
+    date: "2025-01-20",
     time: "2:00 PM - 5:00 PM",
     location: "IIM Ahmedabad Campus",
     description: "Professional development workshop covering resume writing, interview skills, and career advancement strategies.",
@@ -69,7 +69,7 @@ const mockEvents = [
   {
     id: 4,
     title: "Healthcare Innovation Summit",
-    date: "2024-04-10",
+    date: "2025-04-10",
     time: "9:00 AM - 4:00 PM",
     location: "AIIMS New Delhi Conference Center",
     description: "Full-day summit exploring the latest innovations in healthcare technology and patient care in India.",

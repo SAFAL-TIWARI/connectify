@@ -96,48 +96,6 @@ const About = () => {
     }
   ];
 
-  const milestones = [
-    {
-      year: '2018',
-      title: 'Founded',
-      description: 'Connectify was founded with a vision to revolutionize alumni networking.'
-    },
-    {
-      year: '2019',
-      title: 'First 1,000 Users',
-      description: 'Reached our first milestone of 1,000 active alumni members.'
-    },
-    {
-      year: '2020',
-      title: 'Platform Expansion',
-      description: 'Launched mobile app and expanded to 50+ universities.'
-    },
-    {
-      year: '2021',
-      title: 'AI Integration',
-      description: 'Introduced AI-powered matching and networking recommendations.'
-    },
-    {
-      year: '2022',
-      title: 'Global Reach',
-      description: 'Expanded to 200+ partner institutions across India.'
-    },
-    {
-      year: '2023',
-      title: '50K+ Alumni',
-      description: 'Celebrated reaching 50,000+ active alumni members nationwide.'
-    },
-    {
-      year: '2024',
-      title: 'Industry Recognition',
-      description: 'Received "Best Alumni Platform" award from EdTech Innovation Awards.'
-    },
-    {
-      year: '2025',
-      title: 'Future Vision',
-      description: 'Continuing to innovate with new features and expansion across India.'
-    }
-  ];
 
   const stats = [
     { number: '50,000+', label: 'Active Alumni' },

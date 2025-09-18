@@ -50,7 +50,6 @@ import {
   ArrowRight,
   CheckCircle,
   PlayCircle,
-  DollarSign,
   Video,
   BookOpenCheck,
   Podcast,
@@ -153,7 +152,7 @@ const mockEvents = [
   {
     id: 1,
     title: "Annual Alumni Networking Gala",
-    date: "2024-03-15",
+    date: "2025-03-15",
     time: "6:00 PM - 10:00 PM",
     location: "Grand Ballroom, Downtown Hotel",
     description: "Join us for an evening of networking, reconnecting, and celebrating our alumni community. This year's gala features keynote speakers from various industries, live entertainment, and plenty of opportunities to make new connections.",
@@ -166,7 +165,7 @@ const mockEvents = [
   {
     id: 2,
     title: "Tech Talk: AI in Modern Business",
-    date: "2024-02-28",
+    date: "2025-02-28",
     time: "7:00 PM - 9:00 PM",
     location: "University Auditorium",
     description: "A fascinating discussion on how artificial intelligence is transforming various industries. Led by alumni working at top tech companies.",
@@ -179,7 +178,7 @@ const mockEvents = [
   {
     id: 3,
     title: "Career Development Workshop",
-    date: "2024-01-20",
+    date: "2025-01-20",
     time: "2:00 PM - 5:00 PM",
     location: "Student Center, Room 205",
     description: "Professional development workshop covering resume writing, interview skills, and career advancement strategies.",
@@ -192,7 +191,7 @@ const mockEvents = [
   {
     id: 4,
     title: "Healthcare Innovation Summit",
-    date: "2024-04-10",
+    date: "2025-04-10",
     time: "9:00 AM - 4:00 PM",
     location: "Medical School Conference Center",
     description: "Full-day summit exploring the latest innovations in healthcare technology and patient care.",
@@ -214,10 +213,10 @@ const mockJobs = [
     description: "Join our team building the next generation of social technology. We're looking for experienced engineers to work on scalable systems.",
     longDescription: "We are seeking a Senior Software Engineer to join our dynamic team at Meta. In this role, you will be responsible for designing and implementing large-scale distributed systems that serve billions of users worldwide. You'll work closely with cross-functional teams to develop innovative features and improve existing products. The ideal candidate has experience with modern programming languages, system design, and a passion for solving complex technical challenges. You'll have the opportunity to mentor junior engineers and contribute to architectural decisions that impact millions of users. We offer competitive compensation, comprehensive benefits, and the chance to work on cutting-edge technology in a collaborative environment.",
     requirements: ["5+ years of software development experience", "Strong knowledge of system design", "Experience with distributed systems"],
-    salary: "$180,000 - $250,000",
+    salary: "₹180,000 - ₹250,000",
     postedBy: "Sarah Johnson",
-    datePosted: "2024-01-15",
-    applicationDeadline: "2024-02-15"
+    datePosted: "2025-01-15",
+    applicationDeadline: "2025-02-15"
   },
   {
     id: 2,
@@ -228,10 +227,10 @@ const mockJobs = [
     description: "Lead marketing campaigns for our consumer products division. Drive brand awareness and customer engagement.",
     longDescription: "Apple is looking for an innovative Marketing Manager to join our consumer products team. You'll be responsible for developing and executing comprehensive marketing strategies that enhance brand awareness and drive customer engagement. This role involves collaborating with creative teams, analyzing market trends, and managing multi-channel campaigns across digital and traditional media. The ideal candidate brings a deep understanding of consumer behavior, strong analytical skills, and the ability to think creatively about product positioning. You'll work on some of the world's most recognizable products and have the opportunity to influence how millions of customers interact with our brand. We're looking for someone who shares our passion for creating exceptional customer experiences.",
     requirements: ["3+ years of marketing experience", "Strong analytical skills", "Experience with digital marketing platforms"],
-    salary: "$120,000 - $160,000",
+    salary: "₹120,000 - ₹160,000",
     postedBy: "Emily Rodriguez",
-    datePosted: "2024-01-18",
-    applicationDeadline: "2024-02-20"
+    datePosted: "2025-01-18",
+    applicationDeadline: "2025-02-20"
   },
   {
     id: 3,
@@ -242,10 +241,10 @@ const mockJobs = [
     description: "Summer internship program for finance students. Gain hands-on experience in investment banking and financial analysis.",
     longDescription: "Join JP Morgan Chase's prestigious summer internship program and gain invaluable experience in the world of finance. As a Financial Analyst Intern, you'll work alongside experienced professionals on real client engagements, financial modeling, and market analysis projects. This 10-week program provides comprehensive training in financial analysis, valuation techniques, and industry research. You'll have the opportunity to present your work to senior leadership and participate in networking events with professionals across the firm. The internship includes mentorship opportunities, professional development workshops, and exposure to various areas of investment banking. This is an excellent pathway to full-time opportunities and a chance to build lasting relationships in the finance industry.",
     requirements: ["Currently enrolled in finance, economics, or related field", "Strong analytical and communication skills", "Proficiency in Excel and financial modeling"],
-    salary: "$8,000/month",
+    salary: "₹8,000/month",
     postedBy: "Michael Chen",
-    datePosted: "2024-01-10",
-    applicationDeadline: "2024-03-01"
+    datePosted: "2025-01-10",
+    applicationDeadline: "2025-03-01"
   },
   {
     id: 4,
@@ -256,10 +255,10 @@ const mockJobs = [
     description: "Design and develop rocket propulsion systems. Work on cutting-edge aerospace technology.",
     longDescription: "SpaceX is revolutionizing space technology with the ultimate goal of making life multiplanetary. We're seeking a talented Mechanical Engineer to join our propulsion team and contribute to the design and development of next-generation rocket engines. In this role, you'll work on critical components of our Raptor engines, collaborate with world-class engineers, and push the boundaries of what's possible in aerospace engineering. You'll be involved in the entire product development lifecycle, from initial concept through testing and flight operations. The position requires strong problem-solving skills, attention to detail, and the ability to work in a fast-paced, high-stakes environment. You'll have the opportunity to see your work launch into space and contribute to humanity's expansion beyond Earth.",
     requirements: ["BS in Mechanical Engineering or related field", "Experience with CAD software", "Knowledge of propulsion systems preferred"],
-    salary: "$95,000 - $130,000",
+    salary: "₹95,000 - ₹130,000",
     postedBy: "David Park",
-    datePosted: "2024-01-12",
-    applicationDeadline: "2024-02-25"
+    datePosted: "2025-01-12",
+    applicationDeadline: "2025-02-25"
   }
 ];
 
@@ -1117,7 +1116,7 @@ const Connectify = () => {
             
             <Card className="p-8 hover:shadow-lg transition-shadow duration-300 bg-white">
               <div className="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-lg mb-6 mx-auto">
-                <DollarSign className="h-8 w-8 text-blue-600" />
+                <span className="text-3xl font-bold text-blue-600">₹</span>
               </div>
               <h3 className="text-xl font-bold text-center mb-4">Fundraising Campaigns</h3>
               <p className="text-muted-foreground text-center leading-relaxed">
@@ -1162,9 +1161,9 @@ const Connectify = () => {
             
             <div className="text-center">
               <div className="flex items-center justify-center w-16 h-16 bg-white/10 rounded-lg mb-6 mx-auto">
-                <DollarSign className="h-8 w-8 text-white" />
+                <span className="text-3xl font-bold text-white">₹</span>
               </div>
-              <div className="text-4xl font-bold mb-2">$10M+</div>
+              <div className="text-4xl font-bold mb-2">₹8Cr+</div>
               <div className="text-lg text-gray-300">Raised</div>
             </div>
           </div>
@@ -1518,7 +1517,7 @@ const Connectify = () => {
           {/* Bottom Section */}
           <div className="border-t border-gray-700 mt-12 pt-8 text-center">
             <p className="text-gray-400">
-              © 2024 Saanthi. All rights reserved.
+              © 2025 Saanthi. All rights reserved.
             </p>
           </div>
         </div>

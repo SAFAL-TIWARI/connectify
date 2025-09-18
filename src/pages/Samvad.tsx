@@ -65,7 +65,7 @@ const mockPosts: Record<'home' | 'popular' | 'answers', Post[]> = {
       id: 1,
       type: 'question',
       title: 'How to transition from college to industry software development?',
-      author: 'freshgrad2024',
+      author: 'freshgrad2025',
       community: 'Software Development',
       upvotes: 42,
       comments: 18,
@@ -141,7 +141,7 @@ const mockPosts: Record<'home' | 'popular' | 'answers', Post[]> = {
     {
       id: 4,
       type: 'question',
-      title: 'Top companies hiring fresh graduates in 2024',
+      title: 'Top companies hiring fresh graduates in 2025',
       author: 'alumni_network',
       community: 'Career Advice',
       upvotes: 89,

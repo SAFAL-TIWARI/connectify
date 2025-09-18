@@ -16,7 +16,6 @@ import {
   Clock, 
   Briefcase, 
   Building,
-  DollarSign,
   Calendar,
   User,
   ChevronRight,
@@ -39,8 +38,8 @@ const mockJobs = [
     requirements: ["5+ years of software development experience", "Strong knowledge of system design", "Experience with distributed systems"],
     salary: "₹25,00,000 - ₹35,00,000 PA",
     postedBy: "Priya Sharma",
-    datePosted: "2024-01-15",
-    applicationDeadline: "2024-02-15"
+    datePosted: "2025-01-15",
+    applicationDeadline: "2025-02-15"
   },
   {
     id: 2,
@@ -53,8 +52,8 @@ const mockJobs = [
     requirements: ["3+ years of marketing experience", "Strong analytical skills", "Experience with digital marketing platforms"],
     salary: "₹18,00,000 - ₹25,00,000 PA",
     postedBy: "Ananya Gupta",
-    datePosted: "2024-01-18",
-    applicationDeadline: "2024-02-20"
+    datePosted: "2025-01-18",
+    applicationDeadline: "2025-02-20"
   },
   {
     id: 3,
@@ -67,8 +66,8 @@ const mockJobs = [
     requirements: ["Currently enrolled in finance, economics, or related field", "Strong analytical and communication skills", "Proficiency in Excel and financial modeling"],
     salary: "₹50,000/month",
     postedBy: "Rohan Mehta",
-    datePosted: "2024-01-10",
-    applicationDeadline: "2024-03-01"
+    datePosted: "2025-01-10",
+    applicationDeadline: "2025-03-01"
   },
   {
     id: 4,
@@ -81,8 +80,8 @@ const mockJobs = [
     requirements: ["Bachelor's degree in Mechanical Engineering", "Experience with CAD software (CATIA)", "Knowledge of materials science and manufacturing processes"],
     salary: "₹12,00,000 - ₹18,00,000 PA",
     postedBy: "Aditya Kumar",
-    datePosted: "2024-01-22",
-    applicationDeadline: "2024-02-25"
+    datePosted: "2025-01-22",
+    applicationDeadline: "2025-02-25"
   }
 ];
 
@@ -315,7 +314,6 @@ const Careers = () => {
                           {job.type}
                         </span>
                         <span className="flex items-center gap-1">
-                          <DollarSign className="h-3 w-3" />
                           {job.salary}
                         </span>
                       </div>
@@ -443,7 +441,6 @@ const Careers = () => {
                         {selectedJob.type}
                       </span>
                       <span className="flex items-center gap-1">
-                        <DollarSign className="h-4 w-4" />
                         {selectedJob.salary}
                       </span>
                     </div>

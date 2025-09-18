@@ -75,7 +75,7 @@ const defaultProfileData = {
   email: 'rohan.sharma@example.com',
   phone: '+91 98765 43210',
   location: 'Bengaluru, KA',
-  joinDate: 'Joined March 2024',
+  joinDate: 'Joined March 2025',
   about: 'Passionate software engineer with 4+ years of experience in full-stack development. Alumni of Computer Science program, currently working at a leading tech company in Bengaluru. Always eager to connect with fellow alumni and share knowledge.',
   currentPosition: 'Senior Software Engineer',
   company: 'Infosys',

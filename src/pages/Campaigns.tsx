@@ -15,7 +15,6 @@ import {
   Plus,
   Users,
   Calendar,
-  DollarSign,
   Heart,
   Target,
   TrendingUp,
@@ -40,7 +39,7 @@ const campaigns = [
     raised: 1500000,
     goal: 2500000,
     progress: 60,
-    endDate: "2024-12-31",
+    endDate: "2025-12-31",
     organizer: "Connectify Foundation",
     featured: true
   },
@@ -55,7 +54,7 @@ const campaigns = [
     raised: 750000,
     goal: 1200000,
     progress: 63,
-    endDate: "2024-11-30",
+    endDate: "2025-11-30",
     organizer: "Alumni Innovation Committee",
     featured: false
   },
@@ -85,7 +84,7 @@ const campaigns = [
     raised: 620000,
     goal: 1000000,
     progress: 62,
-    endDate: "2024-10-31",
+    endDate: "2025-10-31",
     organizer: "Green Campus Committee",
     featured: false
   },
@@ -100,7 +99,7 @@ const campaigns = [
     raised: 1200000,
     goal: 2000000,
     progress: 60,
-    endDate: "2024-12-15",
+    endDate: "2025-12-15",
     organizer: "Alumni Scholarship Committee",
     featured: true
   },
@@ -115,7 +114,7 @@ const campaigns = [
     raised: 480000,
     goal: 800000,
     progress: 60,
-    endDate: "2024-11-20",
+    endDate: "2025-11-20",
     organizer: "Sports Development Committee",
     featured: false
   }
@@ -339,7 +338,7 @@ const Campaigns = () => {
                       className="w-full bg-green-600 hover:bg-green-700 text-white"
                       onClick={() => handleDonate(campaign)}
                     >
-                      <DollarSign className="mr-2 h-4 w-4" />
+                      <span className="mr-2 text-lg font-bold">₹</span>
                       Donate Now
                     </Button>
                   </div>
@@ -399,7 +398,7 @@ const Campaigns = () => {
                       className="w-full bg-green-600 hover:bg-green-700 text-white"
                       onClick={() => handleDonate(campaign)}
                     >
-                      <DollarSign className="mr-2 h-3 w-3" />
+                      <span className="mr-2 text-sm font-bold">₹</span>
                       Donate Now
                     </Button>
                   </div>
