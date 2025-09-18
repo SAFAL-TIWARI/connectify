@@ -6,6 +6,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import {
   Sheet,
@@ -13,8 +14,10 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { useAuth } from '@/contexts/AuthContext';
 import {
   LogIn,
+  LogOut,
   UserPlus,
   GraduationCap,
   User,
@@ -27,6 +30,7 @@ import {
 
 const Navigation = () => {
   const location = useLocation();
+  const { isLoggedIn, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const isActive = (path: string) => {
@@ -48,7 +52,13 @@ const Navigation = () => {
     { to: '/careers', label: 'Career Hub' },
     { to: '/mentorship', label: 'Mentorship' },
     { to: '/campaigns', label: 'Campaigns' },
+    { to: '/sanwad', label: 'Sanwad' },
   ];
+
+  const handleLogout = () => {
+    logout();
+    // Optionally, redirect to home or login page
+  };
 
   return (
     <nav className="bg-card shadow-soft border-b sticky top-0 z-50">
@@ -57,7 +67,7 @@ const Navigation = () => {
           {/* Logo */}
           <div className="flex items-center">
             <Link
-              to="/"
+              to="/home"
               className="flex items-center space-x-2 text-2xl font-bold bg-gradient-hero bg-clip-text text-transparent"
             >
               <GraduationCap className="h-8 w-8 text-primary" />
@@ -115,12 +125,23 @@ const Navigation = () => {
                     Assistant
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/signup" className="flex items-center">
-                    <LogIn className="h-4 w-4 mr-2" />
-                    Sign Up
-                  </Link>
-                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                {isLoggedIn ? (
+                  <DropdownMenuItem onClick={handleLogout} className="flex items-center cursor-pointer">
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Log Out
+                  </DropdownMenuItem>
+                ) : (
+                  <>
+                    <DropdownMenuItem asChild>
+                      <Link to="/login" className="flex items-center">
+                        <LogIn className="h-4 w-4 mr-2" />
+                        Login
+                      </Link>
+                    </DropdownMenuItem>
+                    
+                  </>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -191,14 +212,40 @@ const Navigation = () => {
                       <Bot className="h-4 w-4 mr-2" />
                       Assistant
                     </Link>
-                    <Link
-                      to="/login"
-                      className="flex items-center px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      <LogIn className="h-4 w-4 mr-2" />
-                      Login
-                    </Link>
+                    
+                    <div className="border-t border-border my-4"></div>
+
+                    {isLoggedIn ? (
+                      <div
+                        className="flex items-center px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer"
+                        onClick={() => {
+                          handleLogout();
+                          setIsMobileMenuOpen(false);
+                        }}
+                      >
+                        <LogOut className="h-4 w-4 mr-2" />
+                        Log Out
+                      </div>
+                    ) : (
+                      <>
+                        <Link
+                          to="/login"
+                          className="flex items-center px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          <LogIn className="h-4 w-4 mr-2" />
+                          Login
+                        </Link>
+                        <Link
+                          to="/signup"
+                          className="flex items-center px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          <UserPlus className="h-4 w-4 mr-2" />
+                          Sign Up
+                        </Link>
+                      </>
+                    )}
                   </div>
                 </div>
               </SheetContent>

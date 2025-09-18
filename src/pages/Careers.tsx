@@ -31,56 +31,56 @@ const mockJobs = [
   {
     id: 1,
     title: "Senior Software Engineer",
-    company: "Meta",
-    location: "Menlo Park, CA",
+    company: "Infosys",
+    location: "Bengaluru, KA",
     type: "Full-time",
-    description: "Join our team building the next generation of social technology. We're looking for experienced engineers to work on scalable systems.",
-    longDescription: "We are seeking a Senior Software Engineer to join our dynamic team at Meta. In this role, you will be responsible for designing and implementing large-scale distributed systems that serve billions of users worldwide. You'll work closely with cross-functional teams to develop innovative features and improve existing products. The ideal candidate has experience with modern programming languages, system design, and a passion for solving complex technical challenges. You'll have the opportunity to mentor junior engineers and contribute to architectural decisions that impact millions of users. We offer competitive compensation, comprehensive benefits, and the chance to work on cutting-edge technology in a collaborative environment.",
+    description: "Join our team building the next generation of digital services. We're looking for experienced engineers to work on scalable systems for our global clients.",
+    longDescription: "We are seeking a Senior Software Engineer to join our dynamic team at Infosys. In this role, you will be responsible for designing and implementing large-scale systems that serve millions of users. You'll work closely with cross-functional teams to develop innovative features and improve existing products. The ideal candidate has experience with modern programming languages, system design, and a passion for solving complex technical challenges. You'll have the opportunity to mentor junior engineers and contribute to architectural decisions that impact millions of users. We offer competitive compensation, comprehensive benefits, and the chance to work on cutting-edge technology in a collaborative environment.",
     requirements: ["5+ years of software development experience", "Strong knowledge of system design", "Experience with distributed systems"],
-    salary: "$180,000 - $250,000",
-    postedBy: "Sarah Johnson",
+    salary: "₹25,00,000 - ₹35,00,000 PA",
+    postedBy: "Priya Sharma",
     datePosted: "2024-01-15",
     applicationDeadline: "2024-02-15"
   },
   {
     id: 2,
     title: "Marketing Manager",
-    company: "Apple",
-    location: "Cupertino, CA",
+    company: "Reliance Jio",
+    location: "Mumbai, MH",
     type: "Full-time",
-    description: "Lead marketing campaigns for our consumer products division. Drive brand awareness and customer engagement.",
-    longDescription: "Apple is looking for an innovative Marketing Manager to join our consumer products team. You'll be responsible for developing and executing comprehensive marketing strategies that enhance brand awareness and drive customer engagement. This role involves collaborating with creative teams, analyzing market trends, and managing multi-channel campaigns across digital and traditional media. The ideal candidate brings a deep understanding of consumer behavior, strong analytical skills, and the ability to think creatively about product positioning. You'll work on some of the world's most recognizable products and have the opportunity to influence how millions of customers interact with our brand. We're looking for someone who shares our passion for creating exceptional customer experiences.",
+    description: "Lead marketing campaigns for our digital services division. Drive brand awareness and customer engagement across India.",
+    longDescription: "Reliance Jio is looking for an innovative Marketing Manager to join our team. You'll be responsible for developing and executing comprehensive marketing strategies that enhance brand awareness and drive customer engagement. This role involves collaborating with creative teams, analyzing market trends, and managing multi-channel campaigns across digital and traditional media. The ideal candidate brings a deep understanding of consumer behavior, strong analytical skills, and the ability to think creatively about product positioning. You'll work on some of the India's most recognizable products and have the opportunity to influence how millions of customers interact with our brand. We're looking for someone who shares our passion for creating exceptional customer experiences.",
     requirements: ["3+ years of marketing experience", "Strong analytical skills", "Experience with digital marketing platforms"],
-    salary: "$120,000 - $160,000",
-    postedBy: "Emily Rodriguez",
+    salary: "₹18,00,000 - ₹25,00,000 PA",
+    postedBy: "Ananya Gupta",
     datePosted: "2024-01-18",
     applicationDeadline: "2024-02-20"
   },
   {
     id: 3,
     title: "Financial Analyst Intern",
-    company: "JP Morgan Chase",
-    location: "New York, NY",
+    company: "HDFC Bank",
+    location: "Mumbai, MH",
     type: "Internship",
     description: "Summer internship program for finance students. Gain hands-on experience in investment banking and financial analysis.",
-    longDescription: "Join JP Morgan Chase's prestigious summer internship program and gain invaluable experience in the world of finance. As a Financial Analyst Intern, you'll work alongside experienced professionals on real client engagements, financial modeling, and market analysis projects. This 10-week program provides comprehensive training in financial analysis, valuation techniques, and industry research. You'll have the opportunity to present your work to senior leadership and participate in networking events with professionals across the firm. The internship includes mentorship opportunities, professional development workshops, and exposure to various areas of investment banking. This is an excellent pathway to full-time opportunities and a chance to build lasting relationships in the finance industry.",
+    longDescription: "Join HDFC Bank's prestigious summer internship program and gain invaluable experience in the world of finance. As a Financial Analyst Intern, you'll work alongside experienced professionals on real client engagements, financial modeling, and market analysis projects. This 10-week program provides comprehensive training in financial analysis, valuation techniques, and industry research. You'll have the opportunity to present your work to senior leadership and participate in networking events with professionals across the firm. The internship includes mentorship opportunities, professional development workshops, and exposure to various areas of investment banking. This is an excellent pathway to full-time opportunities and a chance to build lasting relationships in the finance industry.",
     requirements: ["Currently enrolled in finance, economics, or related field", "Strong analytical and communication skills", "Proficiency in Excel and financial modeling"],
-    salary: "$8,000/month",
-    postedBy: "Michael Chen",
+    salary: "₹50,000/month",
+    postedBy: "Rohan Mehta",
     datePosted: "2024-01-10",
     applicationDeadline: "2024-03-01"
   },
   {
     id: 4,
     title: "Mechanical Engineer",
-    company: "SpaceX",
-    location: "Hawthorne, CA",
+    company: "Tata Motors",
+    location: "Pune, MH",
     type: "Full-time",
-    description: "Design and develop mechanical systems for next-generation spacecraft and launch vehicles.",
-    longDescription: "SpaceX is seeking a talented Mechanical Engineer to join our mission of making life multiplanetary. You'll be responsible for designing, analyzing, and testing mechanical systems for our spacecraft and launch vehicles. This role involves working on cutting-edge projects including the Starship program, Falcon 9 rockets, and Dragon spacecraft. You'll collaborate with multidisciplinary teams to solve complex engineering challenges and push the boundaries of space technology. The ideal candidate has experience with CAD software, finite element analysis, and mechanical design principles. You'll have the opportunity to see your designs come to life and contribute to historic space missions. We're looking for engineers who are passionate about space exploration and want to help humanity become a spacefaring civilization.",
-    requirements: ["Bachelor's degree in Mechanical Engineering", "Experience with CAD software (SolidWorks, CATIA)", "Knowledge of materials science and manufacturing processes"],
-    salary: "$95,000 - $130,000",
-    postedBy: "David Park",
+    description: "Design and develop mechanical systems for next-generation electric vehicles.",
+    longDescription: "Tata Motors is seeking a talented Mechanical Engineer to join our mission of creating sustainable mobility solutions. You'll be responsible for designing, analyzing, and testing mechanical systems for our electric vehicles. This role involves working on cutting-edge projects in the EV space. You'll collaborate with multidisciplinary teams to solve complex engineering challenges and push the boundaries of automotive technology. The ideal candidate has experience with CAD software, finite element analysis, and mechanical design principles. You'll have the opportunity to see your designs come to life and contribute to the future of mobility in India. We're looking for engineers who are passionate about innovation and want to help build a greener future.",
+    requirements: ["Bachelor's degree in Mechanical Engineering", "Experience with CAD software (CATIA)", "Knowledge of materials science and manufacturing processes"],
+    salary: "₹12,00,000 - ₹18,00,000 PA",
+    postedBy: "Aditya Kumar",
     datePosted: "2024-01-22",
     applicationDeadline: "2024-02-25"
   }
@@ -572,7 +572,7 @@ const Careers = () => {
                   id="location"
                   value={newJob.location}
                   onChange={(e) => setNewJob({...newJob, location: e.target.value})}
-                  placeholder="e.g. San Francisco, CA"
+                  placeholder="e.g. Bengaluru, KA"
                 />
               </div>
               <div>
@@ -597,7 +597,7 @@ const Careers = () => {
                 id="salary"
                 value={newJob.salary}
                 onChange={(e) => setNewJob({...newJob, salary: e.target.value})}
-                placeholder="e.g. $120,000 - $160,000"
+                placeholder="e.g. ₹18,00,000 - ₹25,00,000 PA"
               />
             </div>
 

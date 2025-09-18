@@ -21,9 +21,11 @@ import {
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Signup = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [selectedRole, setSelectedRole] = useState('alumni');
   const [formData, setFormData] = useState({
     fullName: '',
@@ -81,6 +83,9 @@ const Signup = () => {
     
     console.log('Signup successful:', userProfileData);
     
+    // Log the user in
+    login();
+
     // Redirect to profile page
     navigate('/profile');
   };

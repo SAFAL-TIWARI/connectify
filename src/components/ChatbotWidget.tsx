@@ -39,7 +39,7 @@ const ChatbotWidget = () => {
       )}
       {isOpen && (
         <Card className="w-96 h-[500px] flex flex-col shadow-lg">
-          <CardHeader className="flex flex-row items-center justify-between bg-primary text-primary-foreground p-4">
+          <CardHeader className="flex flex-row items-center justify-between bg-primary text-primary-foreground p-2">
             <CardTitle className="text-lg">Chat Assistant</CardTitle>
             <Button variant="ghost" size="icon" onClick={toggleChat}>
               <X className="h-5 w-5" />

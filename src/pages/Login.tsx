@@ -14,8 +14,9 @@ import {
   Github,
   Linkedin
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
+import { useAuth } from '@/contexts/AuthContext';
 
 // Google Icon Component
 const GoogleIcon = ({ className }: { className?: string }) => (
@@ -40,6 +41,8 @@ const GoogleIcon = ({ className }: { className?: string }) => (
 );
 
 const Login = () => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
   const [selectedRole, setSelectedRole] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -58,11 +61,15 @@ const Login = () => {
     e.preventDefault();
     // Handle login logic here
     console.log('Login attempt:', { selectedRole, email, password, rememberMe });
+    login();
+    navigate('/profile');
   };
 
   const handleSocialLogin = (provider: string) => {
     // Handle social login
     console.log(`Login with ${provider}`);
+    login();
+    navigate('/profile');
   };
 
   return (
@@ -199,7 +206,7 @@ const Login = () => {
                 className="w-full flex items-center justify-center gap-2 py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800"
               >
                 <GoogleIcon className="w-5 h-5" />
-                <span className="text-sm font-medium">Google</span>
+                <span className="text-sm font-medium text-gray-900 dark:text-white">Google</span>
               </Button>
               <Button
                 type="button"
@@ -208,7 +215,7 @@ const Login = () => {
                 className="w-full flex items-center justify-center gap-2 py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800"
               >
                 <Github className="w-5 h-5 text-gray-900 dark:text-white" />
-                <span className="text-sm font-medium">GitHub</span>
+                <span className="text-sm font-medium text-gray-900 dark:text-white">GitHub</span>
               </Button>
               <Button
                 type="button"
@@ -217,7 +224,7 @@ const Login = () => {
                 className="w-full flex items-center justify-center gap-2 py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800"
               >
                 <Linkedin className="w-5 h-5 text-blue-700" />
-                <span className="text-sm font-medium">LinkedIn</span>
+                <span className="text-sm font-medium text-gray-900 dark:text-white">LinkedIn</span>
               </Button>
             </div>
           </div>

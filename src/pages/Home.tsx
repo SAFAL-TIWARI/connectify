@@ -312,8 +312,8 @@ const Home = () => {
               <div className="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center mx-auto mb-4">
                 <Network className="h-8 w-8 text-white" />
               </div>
-              <div className="text-4xl font-bold mb-2">100+</div>
-              <div className="text-gray-300">Countries Reached</div>
+              <div className="text-4xl font-bold mb-2">28+</div>
+              <div className="text-gray-300">States & UTs Reached</div>
             </div>
 
             <div className="text-center">
@@ -328,8 +328,8 @@ const Home = () => {
               <div className="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center mx-auto mb-4">
                 <DollarSign className="h-8 w-8 text-white" />
               </div>
-              <div className="text-4xl font-bold mb-2">$10M+</div>
-              <div className="text-gray-300">Funds Raised</div>
+              <div className="text-4xl font-bold mb-2">₹8Cr+</div>
+              <div className="text-gray-300">Funds Raised</div> 
             </div>
           </div>
         </div>
@@ -407,12 +407,12 @@ const Home = () => {
               </p>
               <div className="flex items-center">
                 <img
-                  src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400"
-                  alt="Sarah Johnson"
+                  src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400"
+                  alt="Priya Sharma"
                   className="w-12 h-12 rounded-full mr-4"
                 />
                 <div>
-                  <div className="font-semibold">Sarah Johnson</div>
+                  <div className="font-semibold">Priya Sharma</div>
                   <div className="text-sm text-muted-foreground">Class of 2018</div>
                 </div>
               </div>
@@ -425,12 +425,12 @@ const Home = () => {
               </p>
               <div className="flex items-center">
                 <img
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400"
-                  alt="Michael Chen"
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400"
+                  alt="Rohan Mehta"
                   className="w-12 h-12 rounded-full mr-4"
                 />
                 <div>
-                  <div className="font-semibold">Michael Chen</div>
+                  <div className="font-semibold">Rohan Mehta</div>
                   <div className="text-sm text-muted-foreground">Class of 2019</div>
                 </div>
               </div>
@@ -443,12 +443,12 @@ const Home = () => {
               </p>
               <div className="flex items-center">
                 <img
-                  src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400"
-                  alt="Emily Rodriguez"
+                  src="https://randomuser.me/api/portraits/women/8.jpg"
+                  alt="Ananya Gupta"
                   className="w-12 h-12 rounded-full mr-4"
                 />
                 <div>
-                  <div className="font-semibold">Emily Rodriguez</div>
+                  <div className="font-semibold">Ananya Gupta</div>
                   <div className="text-sm text-muted-foreground">Class of 2017</div>
                 </div>
               </div>
@@ -507,12 +507,12 @@ const Home = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/" className="text-gray-300 hover:text-white transition-colors">
+                  <Link to="/home" className="text-gray-300 hover:text-white transition-colors">
                     FAQ
                   </Link>
                 </li>
                 <li>
-                  <Link to="/" className="text-gray-300 hover:text-white transition-colors">
+                  <Link to="/home" className="text-gray-300 hover:text-white transition-colors">
                     Privacy Policy
                   </Link>
                 </li>
@@ -539,8 +539,8 @@ const Home = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/" className="text-gray-300 hover:text-white transition-colors">
-                    Make a Donation
+                  <Link to="/campaigns" className="text-gray-300 hover:text-white transition-colors">
+                    Campaigns
                   </Link>
                 </li>
               </ul>
@@ -551,25 +551,25 @@ const Home = () => {
               <h3 className="text-lg font-semibold mb-4">Stay Connected</h3>
               <ul className="space-y-2">
                 <li>
-                  <a href="#" className="text-gray-300 hover:text-white transition-colors flex items-center">
+                  <a href="/home" className="text-gray-300 hover:text-white transition-colors flex items-center">
                     <Network className="w-4 h-4 mr-2" />
                     LinkedIn
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-300 hover:text-white transition-colors flex items-center">
+                  <a href="/home" className="text-gray-300 hover:text-white transition-colors flex items-center">
                     <Video className="w-4 h-4 mr-2" />
                     Newsletter
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-300 hover:text-white transition-colors flex items-center">
+                  <a href="/home" className="text-gray-300 hover:text-white transition-colors flex items-center">
                     <Podcast className="w-4 h-4 mr-2" />
                     Podcast
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-300 hover:text-white transition-colors flex items-center">
+                  <a href="/home" className="text-gray-300 hover:text-white transition-colors flex items-center">
                     <Monitor className="w-4 h-4 mr-2" />
                     Tech Blog
                   </a>
@@ -583,22 +583,22 @@ const Home = () => {
               <div className="space-y-2 text-gray-300">
                 <p className="flex items-start">
                   <Network className="w-4 h-4 mr-2 mt-1 flex-shrink-0" />
-                  123 University Ave, Campus City, State 12345
+                  123 College Road, Vidyanagar, State 123456
                 </p>
                 <p className="flex items-center">
                   <Video className="w-4 h-4 mr-2 flex-shrink-0" />
-                  alumni@university.edu
+                  alumni@university.ac.in
                 </p>
                 <p className="flex items-center">
                   <Podcast className="w-4 h-4 mr-2 flex-shrink-0" />
-                  +1 (555) 123-4567
+                  +91 (555) 123-4567
                 </p>
               </div>
             </div>
           </div>
 
           <div className="border-t border-gray-700 mt-12 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Saanthi. All rights reserved.</p>
+            <p>&copy; 2025 Connectify. All rights reserved.</p>
           </div>
         </div>
       </footer>

@@ -26,36 +26,36 @@ import {
 const About = () => {
   const teamMembers = [
     {
-      name: 'Dr. Sarah Johnson',
+      name: 'Dr. Priya Sharma',
       role: 'Founder & CEO',
-      image: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop&crop=face',
+      image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop&crop=face',
       bio: 'Former university administrator with 15+ years in alumni relations and educational technology.',
       linkedin: '#',
       twitter: '#',
       email: 'demo@connectify.edu'
     },
     {
-      name: 'Michael Chen',
+      name: 'Rohan Mehta',
       role: 'CTO & Co-founder',
-      image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face',
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
       bio: 'Tech entrepreneur and alumni networking advocate with expertise in scalable platform development.',
       linkedin: '#',
       twitter: '#',
       email: 'demo@connectify.edu'
     },
     {
-      name: 'Dr. Emily Rodriguez',
+      name: 'Dr. Ananya Gupta',
       role: 'Head of Community',
-      image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face',
+      image: 'https://randomuser.me/api/portraits/women/8.jpg',
       bio: 'Career counselor and networking expert focused on building meaningful professional relationships.',
       linkedin: '#',
       twitter: '#',
       email: 'demo@connectify.edu'
     },
     {
-      name: 'David Park',
+      name: 'Aditya Kumar',
       role: 'Head of Product',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
+      image: 'https://randomuser.me/api/portraits/men/9.jpg',
       bio: 'Product strategist with a passion for creating user-centered experiences in educational technology.',
       linkedin: '#',
       twitter: '#',
@@ -82,7 +82,7 @@ const About = () => {
     {
       icon: Globe,
       title: 'Inclusivity',
-      description: 'We welcome alumni from all backgrounds, creating a diverse and inclusive global community.'
+      description: 'We welcome alumni from all backgrounds, creating a diverse and inclusive Indian community.'
     },
     {
       icon: Zap,
@@ -120,12 +120,12 @@ const About = () => {
     {
       year: '2022',
       title: 'Global Reach',
-      description: 'Expanded internationally with 200+ partner institutions.'
+      description: 'Expanded to 200+ partner institutions across India.'
     },
     {
       year: '2023',
       title: '50K+ Alumni',
-      description: 'Celebrated reaching 50,000+ active alumni members worldwide.'
+      description: 'Celebrated reaching 50,000+ active alumni members nationwide.'
     },
     {
       year: '2024',
@@ -135,14 +135,14 @@ const About = () => {
     {
       year: '2025',
       title: 'Future Vision',
-      description: 'Continuing to innovate with new features and global expansion.'
+      description: 'Continuing to innovate with new features and expansion across India.'
     }
   ];
 
   const stats = [
     { number: '50,000+', label: 'Active Alumni' },
     { number: '500+', label: 'Partner Universities' },
-    { number: '100+', label: 'Countries' },
+    { number: '28+', label: 'States & UTs' },
     { number: '95%', label: 'User Satisfaction' }
   ];
 
@@ -156,7 +156,7 @@ const About = () => {
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl md:text-6xl font-bold mb-6">About Connectify</h1>
           <p className="text-xl md:text-2xl max-w-4xl mx-auto opacity-90 leading-relaxed">
-            Empowering alumni communities worldwide through innovative technology, 
+            Empowering alumni communities across India through innovative technology, 
             meaningful connections, and lifelong learning opportunities.
           </p>
         </div>
@@ -173,7 +173,7 @@ const About = () => {
               </div>
               <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">Our Mission</h3>
               <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                To create the world's most comprehensive and engaging alumni networking platform, 
+                To create India's most comprehensive and engaging alumni networking platform, 
                 fostering lifelong connections that drive personal and professional growth.
               </p>
             </Card>
@@ -185,8 +185,8 @@ const About = () => {
               </div>
               <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">Our Vision</h3>
               <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                A world where every graduate stays connected to their alma mater and fellow alumni, 
-                creating a global network of support, opportunity, and collaboration.
+                A nation where every graduate stays connected to their alma mater and fellow alumni, 
+                creating a national network of support, opportunity, and collaboration.
               </p>
             </Card>
 
@@ -213,7 +213,7 @@ const About = () => {
               Our Growing Community
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-400">
-              Numbers that reflect our commitment to connecting alumni worldwide
+              Numbers that reflect our commitment to connecting alumni across India.
             </p>
           </div>
           
@@ -265,50 +265,7 @@ const About = () => {
         </div>
       </section>
 
-      {/* Our Story / Timeline */}
-      <section className="py-20 bg-white dark:bg-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
-              Our Journey
-            </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-              From a simple idea to a global platform connecting alumni worldwide
-            </p>
-          </div>
-          
-          <div className="relative">
-            {/* Timeline line */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-blue-200 dark:bg-blue-800"></div>
-            
-            <div className="space-y-12">
-              {milestones.map((milestone, index) => (
-                <div key={index} className={`flex items-center ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}>
-                  <div className={`w-1/2 ${index % 2 === 0 ? 'pr-8 text-right' : 'pl-8 text-left'}`}>
-                    <Card className="p-6 bg-gray-50 dark:bg-gray-700">
-                      <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-2">
-                        {milestone.year}
-                      </div>
-                      <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">
-                        {milestone.title}
-                      </h3>
-                      <p className="text-gray-600 dark:text-gray-400">
-                        {milestone.description}
-                      </p>
-                    </Card>
-                  </div>
-                  
-                  {/* Timeline dot */}
-                  <div className="relative z-10 w-4 h-4 bg-blue-600 dark:bg-blue-400 rounded-full border-4 border-white dark:border-gray-800"></div>
-                  
-                  <div className="w-1/2"></div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
+     
       
 
       {/* What Makes Us Different */}
@@ -373,10 +330,10 @@ const About = () => {
                 </div>
                 <div>
                   <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">
-                    Global Reach, Local Impact
+                    National Reach, Local Impact
                   </h3>
                   <p className="text-gray-600 dark:text-gray-400">
-                    Connect with alumni worldwide while staying engaged with your local alumni chapter and community events.
+                    Connect with alumni nationwide while staying engaged with your local alumni chapter and community events.
                   </p>
                 </div>
               </div>

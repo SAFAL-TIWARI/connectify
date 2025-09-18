@@ -30,70 +30,70 @@ import {
 const mentors = [
   {
     id: 1,
-    name: "Dr. Sarah Johnson",
+    name: "Dr. Priya Sharma",
     title: "Senior Software Engineer",
-    company: "Google",
-    location: "San Francisco, CA",
+    company: "Infosys",
+    location: "Bengaluru, KA",
     graduationYear: "2015",
     expertise: ["Software Engineering", "AI/ML", "Leadership"],
     rating: 4.9,
     reviews: 47,
-    image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
+    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face",
     bio: "Passionate about helping new graduates navigate their tech careers. Specialized in software engineering and machine learning.",
     availability: "Available",
     sessions: 156
   },
   {
     id: 2,
-    name: "Michael Chen",
+    name: "Rohan Mehta",
     title: "Product Manager",
-    company: "Microsoft",
-    location: "Seattle, WA",
+    company: "Flipkart",
+    location: "Bengaluru, KA",
     graduationYear: "2012",
     expertise: ["Product Management", "Strategy", "Analytics"],
     rating: 4.8,
     reviews: 32,
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
     bio: "Helping aspiring product managers build successful careers in tech. 8+ years of experience in product strategy.",
     availability: "Busy",
     sessions: 89
   },
   {
     id: 3,
-    name: "Emily Rodriguez",
+    name: "Ananya Gupta",
     title: "Marketing Director",
-    company: "Adobe",
-    location: "Austin, TX",
+    company: "Myntra",
+    location: "Bengaluru, KA",
     graduationYear: "2014",
     expertise: ["Digital Marketing", "Brand Strategy", "Growth"],
     rating: 4.9,
     reviews: 28,
-    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+    image: "https://randomuser.me/api/portraits/women/8.jpg",
     bio: "Experienced marketing professional passionate about helping others build impactful marketing careers.",
     availability: "Available",
     sessions: 73
   },
   {
     id: 4,
-    name: "David Kim",
+    name: "Aditya Kumar",
     title: "Data Scientist",
-    company: "Netflix",
-    location: "Los Angeles, CA",
+    company: "Swiggy",
+    location: "Bengaluru, KA",
     graduationYear: "2016",
     expertise: ["Data Science", "Machine Learning", "Analytics"],
     rating: 4.7,
     reviews: 41,
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+    image: "https://randomuser.me/api/portraits/men/9.jpg",
     bio: "Data science expert helping mentees break into the field and advance their analytical skills.",
     availability: "Available",
     sessions: 112
   },
   {
     id: 5,
-    name: "Lisa Thompson",
+    name: "Isha Singh",
     title: "UX Design Lead",
-    company: "Airbnb",
-    location: "San Francisco, CA",
+    company: "Zomato",
+    location: "Gurugram, HR",
     graduationYear: "2013",
     expertise: ["UX Design", "Design Systems", "User Research"],
     rating: 4.8,
@@ -105,15 +105,15 @@ const mentors = [
   },
   {
     id: 6,
-    name: "James Wilson",
+    name: "Vikram Rao",
     title: "Financial Analyst",
-    company: "Goldman Sachs",
-    location: "New York, NY",
+    company: "ICICI Bank",
+    location: "Mumbai, MH",
     graduationYear: "2011",
     expertise: ["Finance", "Investment Banking", "Financial Modeling"],
     rating: 4.6,
     reviews: 22,
-    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face",
+    image: "https://randomuser.me/api/portraits/men/7.jpg",
     bio: "Finance professional helping students and early-career professionals navigate the financial services industry.",
     availability: "Busy",
     sessions: 67
@@ -549,7 +549,7 @@ const Mentorship = () => {
               <Label htmlFor="location">Location *</Label>
               <Input
                 id="location"
-                placeholder="e.g., San Francisco, CA"
+                placeholder="e.g., Bengaluru, KA"
                 className="mt-1"
               />
             </div>

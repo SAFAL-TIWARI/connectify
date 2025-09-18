@@ -29,83 +29,83 @@ import {
 const mockAlumni = [
   {
     id: 1,
-    name: "Sarah Johnson",
-    email: "demo.johnson@email.com",
-    phone: "+1 (555) 123-4567",
-    profilePicture: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400",
+    name: "Priya Sharma",
+    email: "demo.sharma@email.com",
+    phone: "+91 98765 43210",
+    profilePicture: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400",
     graduationYear: 2018,
     major: "Computer Science",
     industry: "Technology",
-    company: "Google",
+    company: "Infosys",
     position: "Senior Software Engineer",
-    location: "Mountain View, CA",
+    location: "Bengaluru, KA",
     bio: "Passionate about AI and machine learning. Love mentoring new graduates and helping them navigate their tech careers.",
     skills: ["JavaScript", "Python", "Machine Learning", "Leadership"],
     workExperience: [
-      { company: "Google", position: "Senior Software Engineer", duration: "2020-Present" },
-      { company: "Microsoft", position: "Software Engineer", duration: "2018-2020" }
+      { company: "Infosys", position: "Senior Software Engineer", duration: "2020-Present" },
+      { company: "TCS", position: "Software Engineer", duration: "2018-2020" }
     ],
     isAvailableForMentoring: true,
     linkedinUrl: "https://linkedin.com/"
   },
   {
     id: 2,
-    name: "Michael Chen",
-    email: "demo.chen@email.com",
-    phone: "+1 (555) 234-5678",
-    profilePicture: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+    name: "Rohan Mehta",
+    email: "demo.mehta@email.com",
+    phone: "+91 91234 56789",
+    profilePicture: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
     graduationYear: 2019,
     major: "Business Administration",
     industry: "Finance",
-    company: "Goldman Sachs",
+    company: "HDFC Bank",
     position: "Investment Analyst",
-    location: "New York, NY",
+    location: "Mumbai, MH",
     bio: "Finance professional with expertise in investment strategies and market analysis. Always eager to share knowledge with fellow alumni.",
     skills: ["Financial Analysis", "Investment Strategy", "Risk Management", "Excel"],
     workExperience: [
-      { company: "Goldman Sachs", position: "Investment Analyst", duration: "2019-Present" }
+      { company: "HDFC Bank", position: "Investment Analyst", duration: "2019-Present" }
     ],
     isAvailableForMentoring: true,
     linkedinUrl: "https://linkedin.com/"
   },
   {
     id: 3,
-    name: "Emily Rodriguez",
-    email: "demo.rodriguez@email.com",
-    phone: "+1 (555) 345-6789",
-    profilePicture: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400",
+    name: "Ananya Gupta",
+    email: "demo.gupta@email.com",
+    phone: "+91 87654 32109",
+    profilePicture: "https://randomuser.me/api/portraits/women/8.jpg",
     graduationYear: 2017,
     major: "Marketing",
     industry: "Healthcare",
-    company: "Johnson & Johnson",
+    company: "Sun Pharma",
     position: "Marketing Director",
-    location: "New Brunswick, NJ",
+    location: "Mumbai, MH",
     bio: "Marketing executive with a passion for healthcare innovation. Love connecting with alumni and sharing career insights.",
     skills: ["Digital Marketing", "Brand Strategy", "Product Launch", "Team Leadership"],
     workExperience: [
-      { company: "Johnson & Johnson", position: "Marketing Director", duration: "2021-Present" },
-      { company: "Pfizer", position: "Senior Marketing Manager", duration: "2018-2021" },
-      { company: "Novartis", position: "Marketing Coordinator", duration: "2017-2018" }
+      { company: "Sun Pharma", position: "Marketing Director", duration: "2021-Present" },
+      { company: "Cipla", position: "Senior Marketing Manager", duration: "2018-2021" },
+      { company: "Dr. Reddy's", position: "Marketing Coordinator", duration: "2017-2018" }
     ],
     isAvailableForMentoring: true,
     linkedinUrl: "https://linkedin.com/"
   },
   {
     id: 4,
-    name: "David Park",
-    email: "demo.park@email.com",
-    phone: "+1 (555) 456-7890",
-    profilePicture: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
+    name: "Aditya Kumar",
+    email: "demo.kumar@email.com",
+    phone: "+91 76543 21098",
+    profilePicture: "https://randomuser.me/api/portraits/men/9.jpg",
     graduationYear: 2020,
     major: "Engineering",
     industry: "Automotive",
-    company: "Tesla",
+    company: "Tata Motors",
     position: "Mechanical Engineer",
-    location: "Austin, TX",
+    location: "Pune, MH",
     bio: "Mechanical engineer working on sustainable transportation solutions. Passionate about innovation and environmental impact.",
-    skills: ["CAD Design", "Project Management", "Renewable Energy", "Problem Solving"],
+    skills: ["CAD Design", "Project Management", "Electric Vehicles", "Problem Solving"],
     workExperience: [
-      { company: "Tesla", position: "Mechanical Engineer", duration: "2020-Present" }
+      { company: "Tata Motors", position: "Mechanical Engineer", duration: "2020-Present" }
     ],
     isAvailableForMentoring: false,
     linkedinUrl: "https://linkedin.com/"
@@ -232,6 +232,8 @@ const AlumniDirectory = () => {
                   <SelectItem value="Finance">Finance</SelectItem>
                   <SelectItem value="Healthcare">Healthcare</SelectItem>
                   <SelectItem value="Automotive">Automotive</SelectItem>
+                  <SelectItem value="Manufacturing">Manufacturing</SelectItem>
+                  <SelectItem value="Education">Education</SelectItem>
                 </SelectContent>
               </Select>
             </div>

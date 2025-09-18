@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -22,6 +23,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 import { User, Mail, Phone, MapPin, Calendar, Edit, Save, X, Plus, Trash2 } from 'lucide-react';
 
 // Dropdown options
@@ -67,34 +69,34 @@ const workYears = Array.from({ length: currentYear - 1980 + 1 }, (_, i) => (curr
 
 // Default profile data
 const defaultProfileData = {
-  name: 'John Doe',
+  name: 'Rohan Sharma',
   title: 'Software Engineer',
-  graduationYear: '2025',
-  email: 'john.doe@email.com',
-  phone: '+1 (555) 123-4567',
-  location: 'San Francisco, CA',
+  graduationYear: '2022',
+  email: 'rohan.sharma@example.com',
+  phone: '+91 98765 43210',
+  location: 'Bengaluru, KA',
   joinDate: 'Joined March 2024',
-  about: 'Passionate software engineer with 4+ years of experience in full-stack development. Alumni of Computer Science program, currently working at a leading tech company in Silicon Valley. Always eager to connect with fellow alumni and share knowledge.',
+  about: 'Passionate software engineer with 4+ years of experience in full-stack development. Alumni of Computer Science program, currently working at a leading tech company in Bengaluru. Always eager to connect with fellow alumni and share knowledge.',
   currentPosition: 'Senior Software Engineer',
-  company: 'Tech Innovations Inc.',
+  company: 'Infosys',
   workStartYear: '2022',
   workEndYear: 'Present',
-  skills: ['JavaScript', 'React', 'Node.js', 'Python', 'AWS', 'Docker', 'MongoDB', 'TypeScript'],
+  skills: ['Java', 'Spring Boot', 'React', 'Python', 'AWS', 'Docker', 'MySQL', 'TypeScript'],
   education: {
-    degree: 'Bachelor of Science in Computer Science',
-    university: 'Stanford University',
-    gpa: '3.8/4.0'
+    degree: 'Bachelor of Technology in Computer Science',
+    university: 'IIT Bombay',
+    gpa: '8.8/10.0'
   },
   experience: [
     {
       position: 'Senior Software Engineer',
-      company: 'Tech Innovations Inc.',
+      company: 'Infosys',
       duration: '2022 - Present',
-      description: 'Lead development of scalable web applications using React and Node.js. Mentored junior developers and improved system performance by 40%.'
+      description: 'Lead development of scalable web applications using Spring Boot and React. Mentored junior developers and improved system performance by 40%.'
     },
     {
       position: 'Software Engineer',
-      company: 'StartupXYZ',
+      company: 'StartupConnect',
       duration: '2020 - 2022',
       description: 'Developed full-stack applications and implemented CI/CD pipelines. Collaborated with cross-functional teams to deliver high-quality software solutions.'
     }
@@ -102,12 +104,13 @@ const defaultProfileData = {
   achievements: [
     'Led a team of 5 developers in building a customer portal that increased user engagement by 60%',
     'Implemented automated testing framework that reduced bug reports by 45%',
-    'Speaker at Tech Conference 2023 on "Modern React Patterns"',
+    'Speaker at NASSCOM Tech Conference 2023 on "Modern Microservices Patterns"',
     'Contributed to open-source projects with 1000+ GitHub stars'
   ]
 };
 
 const Profile = () => {
+  const { isLoggedIn } = useAuth();
   const [profileData, setProfileData] = useState(defaultProfileData);
   const [editData, setEditData] = useState(defaultProfileData);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -115,49 +118,51 @@ const Profile = () => {
 
   // Load user data from localStorage on component mount
   useEffect(() => {
-    const storedUserData = localStorage.getItem('userProfile');
-    if (storedUserData) {
-      try {
-        const userData = JSON.parse(storedUserData);
-        
-        // Transform signup data to profile format
-        const transformedData = {
-          name: userData.fullName || defaultProfileData.name,
-          title: userData.currentJobTitle || userData.selectedRole || defaultProfileData.title,
-          graduationYear: userData.graduationYear || defaultProfileData.graduationYear,
-          email: userData.email || defaultProfileData.email,
-          phone: userData.phoneNumber || defaultProfileData.phone,
-          location: userData.city && userData.country ? `${userData.city}, ${userData.country}` : defaultProfileData.location,
-          joinDate: userData.joinDate || defaultProfileData.joinDate,
-          about: userData.bio || defaultProfileData.about,
-          currentPosition: userData.currentJobTitle || defaultProfileData.currentPosition,
-          company: userData.company || defaultProfileData.company,
-          workStartYear: defaultProfileData.workStartYear,
-          workEndYear: defaultProfileData.workEndYear,
-          skills: userData.skills ? userData.skills.split(',').map((skill: string) => skill.trim()) : defaultProfileData.skills,
-          education: {
-            degree: userData.majorField ? `Bachelor of Science in ${userData.majorField}` : defaultProfileData.education.degree,
-            university: defaultProfileData.education.university,
-            gpa: defaultProfileData.education.gpa
-          },
-          experience: userData.currentJobTitle && userData.company ? [
-            {
-              position: userData.currentJobTitle,
-              company: userData.company,
-              duration: 'Present',
-              description: `Working as ${userData.currentJobTitle} at ${userData.company}`
-            }
-          ] : defaultProfileData.experience,
-          achievements: defaultProfileData.achievements
-        };
-        
-        setProfileData(transformedData);
-        setEditData(transformedData);
-      } catch (error) {
-        console.error('Error parsing stored user data:', error);
+    if (isLoggedIn) {
+      const storedUserData = localStorage.getItem('userProfile');
+      if (storedUserData) {
+        try {
+          const userData = JSON.parse(storedUserData);
+          
+          // Transform signup data to profile format
+          const transformedData = {
+            name: userData.fullName || defaultProfileData.name,
+            title: userData.currentJobTitle || userData.selectedRole || defaultProfileData.title,
+            graduationYear: userData.graduationYear || defaultProfileData.graduationYear,
+            email: userData.email || defaultProfileData.email,
+            phone: userData.phoneNumber || defaultProfileData.phone,
+            location: userData.city && userData.country ? `${userData.city}, ${userData.country}` : defaultProfileData.location,
+            joinDate: userData.joinDate || defaultProfileData.joinDate,
+            about: userData.bio || defaultProfileData.about,
+            currentPosition: userData.currentJobTitle || defaultProfileData.currentPosition,
+            company: userData.company || defaultProfileData.company,
+            workStartYear: defaultProfileData.workStartYear,
+            workEndYear: defaultProfileData.workEndYear,
+            skills: userData.skills ? userData.skills.split(',').map((skill: string) => skill.trim()) : defaultProfileData.skills,
+            education: {
+              degree: userData.majorField ? `Bachelor of Science in ${userData.majorField}` : defaultProfileData.education.degree,
+              university: defaultProfileData.education.university,
+              gpa: defaultProfileData.education.gpa
+            },
+            experience: userData.currentJobTitle && userData.company ? [
+              {
+                position: userData.currentJobTitle,
+                company: userData.company,
+                duration: 'Present',
+                description: `Working as ${userData.currentJobTitle} at ${userData.company}`
+              }
+            ] : defaultProfileData.experience,
+            achievements: defaultProfileData.achievements
+          };
+          
+          setProfileData(transformedData);
+          setEditData(transformedData);
+        } catch (error) {
+          console.error('Error parsing stored user data:', error);
+        }
       }
     }
-  }, []);
+  }, [isLoggedIn]);
 
   const handleEditClick = () => {
     setEditData(profileData); // Initialize edit form with current data
@@ -255,6 +260,30 @@ const Profile = () => {
       experience: prev.experience.filter((_, i) => i !== index)
     }));
   };
+
+  if (!isLoggedIn) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
+          <Card className="p-8">
+            <h2 className="text-2xl font-bold mb-4">Profile Not Available</h2>
+            <p className="text-muted-foreground mb-6">
+              Please log in or sign up to view and edit your profile.
+            </p>
+            <div className="flex justify-center gap-4">
+              <Button asChild>
+                <Link to="/login">Log In</Link>
+              </Button>
+              <Button asChild variant="outline">
+                <Link to="/signup">Sign Up</Link>
+              </Button>
+            </div>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
