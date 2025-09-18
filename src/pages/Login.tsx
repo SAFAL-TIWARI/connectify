@@ -82,7 +82,7 @@ const Login = () => {
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: "url('/src/assets/login-preview.png')"
+            backgroundImage: "url('/login-preview.png')"
           }}
         ></div>
         

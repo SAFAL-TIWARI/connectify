@@ -134,7 +134,7 @@ const mockPosts: Record<'home' | 'popular' | 'answers', Post[]> = {
       content: 'Sharing a short demo of our new Project SATI ChatBot. Check it out!',
       answers: 0,
       isAnswered: false,
-      videoUrl: new URL('../assets/video.mp4', import.meta.url).href,
+      videoUrl: new URL('/video.mp4', import.meta.url).href,
     },
   ],
   popular: [
@@ -212,7 +212,7 @@ const mockPosts: Record<'home' | 'popular' | 'answers', Post[]> = {
         'Sharing our platform teaser video. Feedback welcome!',
       answers: 0,
       isAnswered: false,
-      videoUrl: new URL('../assets/stock.mp4', import.meta.url).href,
+      videoUrl: new URL('/stock.mp4', import.meta.url).href,
     },
   ],
   answers: [

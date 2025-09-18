@@ -218,7 +218,7 @@ const Signup = () => {
             <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{
-              backgroundImage: "url('/src/assets/signup-preview.png')"
+              backgroundImage: "url('/signup-preview.png')"
             }}
             ></div>
           
