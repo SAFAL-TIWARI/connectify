@@ -82,7 +82,7 @@ const Login = () => {
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: "url('https://img.freepik.com/premium-vector/college-university-students-campus-community-vector-illustration_497046-2521.jpg')"
+            backgroundImage: "url('/src/assets/login-preview.png')"
           }}
         ></div>
         
@@ -90,12 +90,7 @@ const Login = () => {
         <div className="absolute inset-0 bg-black/40"></div>
 
         {/* Illustration Content */}
-        <div className="relative z-10 flex flex-col items-center justify-center w-full p-12 text-center">
-          <h1 className="text-4xl font-bold text-white mb-4">Welcome Back!</h1>
-          <p className="text-lg text-white/90 max-w-md">
-            Connect with your alumni network and unlock new opportunities.
-          </p>
-        </div>
+        
       </div>
 
       {/* Right Side - Login Form */}

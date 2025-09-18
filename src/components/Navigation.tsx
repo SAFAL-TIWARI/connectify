@@ -25,7 +25,8 @@ import {
   X,
   Info,
   Mail,
-  Bot
+  Bot,
+  Trophy
 } from 'lucide-react';
 
 const Navigation = () => {
@@ -125,6 +126,12 @@ const Navigation = () => {
                     Assistant
                   </Link>
                 </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/leaderboard" className="flex items-center">
+                    <Trophy className="h-4 w-4 mr-2" />
+                    Leaderboard
+                  </Link>
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 {isLoggedIn ? (
                   <DropdownMenuItem onClick={handleLogout} className="flex items-center cursor-pointer">
@@ -211,6 +218,14 @@ const Navigation = () => {
                     >
                       <Bot className="h-4 w-4 mr-2" />
                       Assistant
+                    </Link>
+                    <Link
+                      to="/leaderboard"
+                      className="flex items-center px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <Trophy className="h-4 w-4 mr-2" />
+                      Leaderboard
                     </Link>
                     
                     <div className="border-t border-border my-4"></div>

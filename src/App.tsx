@@ -18,6 +18,7 @@ import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 import Assistant from "./pages/Assistant";
 import Samvad from "./pages/Samvad";
+import Leaderboard from "./pages/Leaderboard";
 import ChatbotWidget from "./components/ChatbotWidget";
 
 const queryClient = new QueryClient();
@@ -43,6 +44,7 @@ const AppContent = () => {
         <Route path="/about" element={<About />} />
         <Route path="/assistant" element={<Assistant />} />
         <Route path="/samvad" element={<Samvad />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>

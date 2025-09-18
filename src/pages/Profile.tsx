@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -29,7 +29,10 @@ import {
 } from '@/components/ui/popover';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
-import { User, Mail, Phone, MapPin, Calendar, Edit, Save, X, Plus, Trash2, Github, Instagram, Twitter, Facebook, Linkedin, Globe, Link2 } from 'lucide-react';
+import { User, Mail, Phone, MapPin, Calendar, Edit, Save, X, Plus, Trash2, Github, Instagram, Twitter, Facebook, Linkedin, Globe, Link2, FileText, Trophy, Eye, ChevronRight, Download, Share2 } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { generateResumePDF, downloadPDF, shareResume, ProfileData } from '@/utils/pdfGenerator';
 
 // Dropdown options
 const professionalTitles = [
@@ -81,6 +84,7 @@ const defaultProfileData = {
   phone: '+91 98765 43210',
   location: 'Bengaluru, KA',
   joinDate: 'Joined March 2025',
+  profileImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
   about: 'Passionate software engineer with 4+ years of experience in full-stack development. Alumni of Computer Science program, currently working at a leading tech company in Bengaluru. Always eager to connect with fellow alumni and share knowledge.',
   currentPosition: 'Senior Software Engineer',
   company: 'Infosys',
@@ -124,11 +128,24 @@ const defaultProfileData = {
 
 const Profile = () => {
   const { isLoggedIn } = useAuth();
+  const navigate = useNavigate();
   const [profileData, setProfileData] = useState(defaultProfileData);
   const [editData, setEditData] = useState(defaultProfileData);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [openSocialPopover, setOpenSocialPopover] = useState<string | null>(null);
+  const [isResumeDialogOpen, setIsResumeDialogOpen] = useState(false);
+  const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
+  const [isResumePreviewOpen, setIsResumePreviewOpen] = useState(false);
   const { toast } = useToast();
+
+  // Mock user stats data
+  const userStats = {
+    profileViews: 1,
+    globalRank: 8576,
+    totalPoints: 100,
+    totalBadges: 4
+  };
 
   // Load user data from localStorage on component mount
   useEffect(() => {
@@ -147,6 +164,7 @@ const Profile = () => {
             phone: userData.phoneNumber || defaultProfileData.phone,
             location: userData.city && userData.country ? `${userData.city}, ${userData.country}` : defaultProfileData.location,
             joinDate: userData.joinDate || defaultProfileData.joinDate,
+            profileImage: userData.profileImage || defaultProfileData.profileImage,
             about: userData.bio || defaultProfileData.about,
             currentPosition: userData.currentJobTitle || defaultProfileData.currentPosition,
             company: userData.company || defaultProfileData.company,
@@ -295,6 +313,120 @@ const Profile = () => {
     });
   };
 
+  // Resume functionality handlers
+  const handleCreateResume = () => {
+    setIsResumeDialogOpen(true);
+  };
+
+  const handleFetchFromProfile = () => {
+    setIsResumeDialogOpen(false);
+    setIsTemplateDialogOpen(true);
+  };
+
+  const handleCreateOwn = () => {
+    setIsResumeDialogOpen(false);
+    toast({
+      title: "Feature Coming Soon",
+      description: "Custom resume builder will be available soon!",
+    });
+  };
+
+  const handleTemplateSelect = (templateId: string) => {
+    setSelectedTemplate(templateId);
+    setIsTemplateDialogOpen(false);
+    setIsResumePreviewOpen(true);
+  };
+
+  const handleDownloadResume = async () => {
+    try {
+      toast({
+        title: "Generating PDF...",
+        description: "Please wait while we create your resume.",
+      });
+
+      const pdfData: ProfileData = {
+        name: profileData.name,
+        title: profileData.title,
+        graduationYear: profileData.graduationYear,
+        email: profileData.email,
+        phone: profileData.phone,
+        location: profileData.location,
+        about: profileData.about,
+        currentPosition: profileData.currentPosition,
+        company: profileData.company,
+        skills: profileData.skills,
+        education: profileData.education,
+        experience: profileData.experience,
+        achievements: profileData.achievements
+      };
+
+      const pdfBlob = await generateResumePDF(pdfData, selectedTemplate || 'classic');
+      const filename = `${profileData.name.replace(/\s+/g, '_')}_Resume.pdf`;
+      downloadPDF(pdfBlob, filename);
+
+      toast({
+        title: "Download Complete!",
+        description: "Your resume has been downloaded successfully.",
+      });
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      toast({
+        title: "Download Failed",
+        description: "There was an error generating your resume. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleShareResume = async () => {
+    try {
+      toast({
+        title: "Preparing to share...",
+        description: "Getting your resume ready for sharing.",
+      });
+
+      const pdfData: ProfileData = {
+        name: profileData.name,
+        title: profileData.title,
+        graduationYear: profileData.graduationYear,
+        email: profileData.email,
+        phone: profileData.phone,
+        location: profileData.location,
+        about: profileData.about,
+        currentPosition: profileData.currentPosition,
+        company: profileData.company,
+        skills: profileData.skills,
+        education: profileData.education,
+        experience: profileData.experience,
+        achievements: profileData.achievements
+      };
+
+      const success = await shareResume(pdfData);
+      
+      if (success) {
+        toast({
+          title: "Ready to Share!",
+          description: navigator.share 
+            ? "Share dialog opened successfully." 
+            : "Resume downloaded and share text copied to clipboard.",
+        });
+      } else {
+        throw new Error('Share operation failed');
+      }
+    } catch (error) {
+      console.error('Error sharing resume:', error);
+      toast({
+        title: "Share Failed",
+        description: "There was an error preparing your resume for sharing. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleViewLeaderboard = () => {
+    navigate('/leaderboard');
+  };
+
   if (!isLoggedIn) {
     return (
       <div className="min-h-screen bg-background">
@@ -322,14 +454,19 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="space-y-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main Profile Content */}
+          <div className="lg:col-span-2 space-y-6">
           {/* Profile Header */}
           <Card className="p-6">
             <div className="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-6">
-              <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center">
-                <User className="h-12 w-12 text-primary" />
-              </div>
+              <Avatar className="w-24 h-24 border-4 border-primary/20">
+                <AvatarImage src={profileData.profileImage} alt={profileData.name} />
+                <AvatarFallback className="bg-primary/10 text-primary text-2xl font-bold">
+                  {profileData.name.split(' ').map(n => n[0]).join('')}
+                </AvatarFallback>
+              </Avatar>
               <div className="flex-1">
                 <h1 className="text-3xl font-bold mb-2">{profileData.name}</h1>
                 <p className="text-muted-foreground mb-4">{profileData.title} | Batch of {profileData.graduationYear}</p>
@@ -997,7 +1134,473 @@ const Profile = () => {
               ))}
             </ul>
           </Card>
+          </div>
+
+          {/* Right Sidebar */}
+          <div className="space-y-6">
+            {/* Resume Builder Section */}
+            <Card className="p-6">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+                  <FileText className="h-6 w-6 text-primary" />
+                </div>
+                <div className="flex-1 space-y-2">
+                  <Button 
+                    onClick={handleCreateResume}
+                    className="w-full bg-primary hover:bg-primary/90 text-white"
+                  >
+                    <FileText className="h-4 w-4 mr-2" />
+                    Create your Resume
+                  </Button>
+                  <div className="flex space-x-2">
+                    <Button 
+                      onClick={async () => {
+                        const pdfData: ProfileData = {
+                          name: profileData.name,
+                          title: profileData.title,
+                          graduationYear: profileData.graduationYear,
+                          email: profileData.email,
+                          phone: profileData.phone,
+                          location: profileData.location,
+                          about: profileData.about,
+                          currentPosition: profileData.currentPosition,
+                          company: profileData.company,
+                          skills: profileData.skills,
+                          education: profileData.education,
+                          experience: profileData.experience,
+                          achievements: profileData.achievements
+                        };
+                        try {
+                          const pdfBlob = await generateResumePDF(pdfData, 'classic');
+                          downloadPDF(pdfBlob, `${profileData.name.replace(/\s+/g, '_')}_Resume.pdf`);
+                          toast({
+                            title: "Download Complete!",
+                            description: "Your resume has been downloaded successfully.",
+                          });
+                        } catch (error) {
+                          toast({
+                            title: "Download Failed",
+                            description: "There was an error generating your resume.",
+                            variant: "destructive"
+                          });
+                        }
+                      }}
+                      variant="outline"
+                      size="sm"
+                      className="flex-1"
+                    >
+                      <Download className="h-3 w-3 mr-1" />
+                      Quick PDF
+                    </Button>
+                    <Button 
+                      onClick={async () => {
+                        const pdfData: ProfileData = {
+                          name: profileData.name,
+                          title: profileData.title,
+                          graduationYear: profileData.graduationYear,
+                          email: profileData.email,
+                          phone: profileData.phone,
+                          location: profileData.location,
+                          about: profileData.about,
+                          currentPosition: profileData.currentPosition,
+                          company: profileData.company,
+                          skills: profileData.skills,
+                          education: profileData.education,
+                          experience: profileData.experience,
+                          achievements: profileData.achievements
+                        };
+                        try {
+                          const success = await shareResume(pdfData);
+                          if (success) {
+                            toast({
+                              title: "Ready to Share!",
+                              description: navigator.share 
+                                ? "Share dialog opened successfully." 
+                                : "Resume downloaded and share text copied to clipboard.",
+                            });
+                          }
+                        } catch (error) {
+                          toast({
+                            title: "Share Failed",
+                            description: "There was an error preparing your resume for sharing.",
+                            variant: "destructive"
+                          });
+                        }
+                      }}
+                      variant="outline"
+                      size="sm"
+                      className="flex-1"
+                    >
+                      <Share2 className="h-3 w-3 mr-1" />
+                      Share
+                    </Button>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="space-y-3">
+                <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center">
+                      <span className="text-xs font-bold text-yellow-600">{userStats.profileViews}</span>
+                    </div>
+                    <span className="text-sm font-medium">Profile Views</span>
+                  </div>
+                  <Eye className="h-4 w-4 text-muted-foreground" />
+                </div>
+                
+                <div className="text-xs text-muted-foreground">
+                  Increase your profile Engagement by 3X 🚀 by filling the details below
+                </div>
+              </div>
+            </Card>
+
+            {/* Rankings Section */}
+            <Card className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold">Rankings</h3>
+                <Button variant="link" className="text-sm text-primary p-0">
+                  How it works?
+                </Button>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900 p-4 rounded-lg">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm text-muted-foreground">Global Rank</span>
+                    <div className="flex space-x-1">
+                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                        <ChevronRight className="h-3 w-3 rotate-180" />
+                      </Button>
+                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                        <ChevronRight className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="text-sm text-muted-foreground mb-1">Based on activity</div>
+                  <div className="flex items-center space-x-2">
+                    <Trophy className="h-5 w-5 text-primary" />
+                    <span className="text-2xl font-bold">{userStats.globalRank.toLocaleString()}</span>
+                  </div>
+                </div>
+                
+                <Button 
+                  onClick={handleViewLeaderboard}
+                  className="w-full bg-primary hover:bg-primary/90 text-white"
+                >
+                  View Leaderboard
+                </Button>
+                
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between p-3 border rounded-lg">
+                    <span className="text-sm font-medium">Total Points</span>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-lg font-bold text-primary">{userStats.totalPoints}</span>
+                      <Badge variant="secondary" className="text-xs">0</Badge>
+                      <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center justify-between p-3 border rounded-lg">
+                    <span className="text-sm font-medium">Total Badges</span>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-lg font-bold text-primary">{userStats.totalBadges}</span>
+                      <Badge variant="secondary" className="text-xs">6</Badge>
+                      <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </div>
         </div>
+
+        {/* Resume Creation Dialog */}
+        <Dialog open={isResumeDialogOpen} onOpenChange={setIsResumeDialogOpen}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Create your Resume</DialogTitle>
+              <DialogDescription>
+                Choose how you'd like to create your resume
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4">
+              <Button 
+                onClick={handleFetchFromProfile}
+                className="w-full justify-start h-auto p-4"
+                variant="outline"
+              >
+                <div className="text-left">
+                  <div className="font-medium">Fetch from Profile</div>
+                  <div className="text-sm text-muted-foreground">Use your existing profile data</div>
+                </div>
+              </Button>
+              <Button 
+                onClick={handleCreateOwn}
+                className="w-full justify-start h-auto p-4"
+                variant="outline"
+              >
+                <div className="text-left">
+                  <div className="font-medium">Create your own</div>
+                  <div className="text-sm text-muted-foreground">Start from scratch</div>
+                </div>
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Template Selection Dialog */}
+        <Dialog open={isTemplateDialogOpen} onOpenChange={setIsTemplateDialogOpen}>
+          <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Choose from a wide variety of templates</DialogTitle>
+            </DialogHeader>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-4">
+              {/* Template 1 - Classic */}
+              <div className="space-y-3">
+                <div 
+                  className="border-2 border-dashed border-gray-300 rounded-lg p-8 cursor-pointer hover:border-primary transition-colors"
+                  onClick={() => handleTemplateSelect('create-new')}
+                >
+                  <div className="text-center">
+                    <Plus className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                    <div className="text-sm font-medium">Create a</div>
+                    <div className="text-sm font-medium">new resume</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Template 2 - Modern Blue */}
+              <div className="space-y-3">
+                <div 
+                  className="border rounded-lg overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
+                  onClick={() => handleTemplateSelect('modern-blue')}
+                >
+                  <div className="bg-white p-4 h-64">
+                    <div className="flex items-start space-x-3">
+                      <div className="w-12 h-12 bg-gray-200 rounded-full"></div>
+                      <div className="flex-1">
+                        <div className="h-3 bg-gray-800 rounded mb-1"></div>
+                        <div className="h-2 bg-gray-400 rounded w-3/4"></div>
+                      </div>
+                    </div>
+                    <div className="mt-4 space-y-2">
+                      <div className="h-2 bg-gray-300 rounded"></div>
+                      <div className="h-2 bg-gray-300 rounded w-5/6"></div>
+                      <div className="h-2 bg-gray-300 rounded w-4/6"></div>
+                    </div>
+                    <div className="mt-4">
+                      <div className="h-2 bg-gray-800 rounded w-1/3 mb-2"></div>
+                      <div className="space-y-1">
+                        <div className="h-1.5 bg-gray-300 rounded"></div>
+                        <div className="h-1.5 bg-gray-300 rounded w-4/5"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="text-center text-sm font-medium">Classic Template</div>
+              </div>
+
+              {/* Template 3 - Professional */}
+              <div className="space-y-3">
+                <div 
+                  className="border rounded-lg overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
+                  onClick={() => handleTemplateSelect('professional')}
+                >
+                  <div className="bg-blue-600 text-white p-4 h-64">
+                    <div className="text-center mb-4">
+                      <div className="w-16 h-16 bg-white/20 rounded-full mx-auto mb-2"></div>
+                      <div className="h-3 bg-white rounded mb-1"></div>
+                      <div className="h-2 bg-white/70 rounded w-3/4 mx-auto"></div>
+                    </div>
+                    <div className="space-y-3">
+                      <div>
+                        <div className="h-2 bg-white rounded w-1/2 mb-1"></div>
+                        <div className="h-1.5 bg-white/70 rounded"></div>
+                        <div className="h-1.5 bg-white/70 rounded w-4/5"></div>
+                      </div>
+                      <div>
+                        <div className="h-2 bg-white rounded w-1/3 mb-1"></div>
+                        <div className="flex space-x-1">
+                          <div className="h-1.5 bg-white/70 rounded flex-1"></div>
+                          <div className="h-1.5 bg-white/70 rounded flex-1"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="text-center text-sm font-medium">Modern Blue</div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Resume Preview Dialog */}
+        <Dialog open={isResumePreviewOpen} onOpenChange={setIsResumePreviewOpen}>
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Resume Preview</DialogTitle>
+              <div className="flex space-x-2">
+                <Button onClick={handleDownloadResume} size="sm">
+                  <Download className="h-4 w-4 mr-2" />
+                  Download PDF
+                </Button>
+                <Button onClick={handleShareResume} size="sm" variant="outline">
+                  <Share2 className="h-4 w-4 mr-2" />
+                  Share
+                </Button>
+              </div>
+            </DialogHeader>
+            
+            {/* Resume Content */}
+            <div className="bg-white text-black p-8 rounded-lg shadow-lg">
+              {selectedTemplate === 'professional' ? (
+                // Blue Professional Template
+                <div className="grid grid-cols-3 gap-6 min-h-[800px]">
+                  {/* Left Sidebar */}
+                  <div className="bg-blue-600 text-white p-6 rounded-l-lg">
+                    <div className="text-center mb-6">
+                      <div className="w-24 h-24 bg-white/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <User className="h-12 w-12 text-white" />
+                      </div>
+                      <h1 className="text-xl font-bold">{profileData.name}</h1>
+                      <p className="text-blue-100 text-sm">{profileData.title}</p>
+                    </div>
+                    
+                    <div className="space-y-6">
+                      <div>
+                        <h3 className="font-semibold mb-3 text-lg">Contact</h3>
+                        <div className="space-y-2 text-sm">
+                          <div className="flex items-center space-x-2">
+                            <Mail className="h-3 w-3" />
+                            <span className="text-xs">{profileData.email}</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Phone className="h-3 w-3" />
+                            <span className="text-xs">{profileData.phone}</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <MapPin className="h-3 w-3" />
+                            <span className="text-xs">{profileData.location}</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <h3 className="font-semibold mb-3 text-lg">Skills</h3>
+                        <div className="space-y-2">
+                          {profileData.skills.slice(0, 6).map((skill, index) => (
+                            <div key={index} className="text-sm">
+                              <div className="flex justify-between mb-1">
+                                <span>{skill}</span>
+                              </div>
+                              <div className="w-full bg-white/20 rounded-full h-1">
+                                <div className="bg-white h-1 rounded-full" style={{width: '85%'}}></div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <h3 className="font-semibold mb-3 text-lg">Education</h3>
+                        <div className="text-sm">
+                          <div className="font-medium">{profileData.education.degree}</div>
+                          <div className="text-blue-100">{profileData.education.university}</div>
+                          <div className="text-blue-200 text-xs">GPA: {profileData.education.gpa}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Right Content */}
+                  <div className="col-span-2 p-6">
+                    <div className="space-y-6">
+                      <div>
+                        <h2 className="text-2xl font-bold text-blue-600 mb-4 border-b-2 border-blue-600 pb-2">Profile</h2>
+                        <p className="text-gray-700 text-sm leading-relaxed">{profileData.about}</p>
+                      </div>
+                      
+                      <div>
+                        <h2 className="text-2xl font-bold text-blue-600 mb-4 border-b-2 border-blue-600 pb-2">Experience</h2>
+                        <div className="space-y-4">
+                          {profileData.experience.map((exp, index) => (
+                            <div key={index}>
+                              <div className="flex justify-between items-start mb-2">
+                                <div>
+                                  <h3 className="font-semibold text-lg">{exp.position}</h3>
+                                  <p className="text-blue-600 font-medium">{exp.company}</p>
+                                </div>
+                                <span className="text-sm text-gray-500">{exp.duration}</span>
+                              </div>
+                              <p className="text-gray-700 text-sm">{exp.description}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                // Default Classic Template
+                <div className="space-y-6">
+                  <div className="text-center border-b pb-6">
+                    <h1 className="text-3xl font-bold text-gray-800 mb-2">{profileData.name}</h1>
+                    <p className="text-lg text-gray-600 mb-4">{profileData.title}</p>
+                    <div className="flex justify-center space-x-6 text-sm text-gray-600">
+                      <span>{profileData.email}</span>
+                      <span>{profileData.phone}</span>
+                      <span>{profileData.location}</span>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h2 className="text-xl font-bold text-gray-800 mb-3">Professional Summary</h2>
+                    <p className="text-gray-700">{profileData.about}</p>
+                  </div>
+                  
+                  <div>
+                    <h2 className="text-xl font-bold text-gray-800 mb-3">Experience</h2>
+                    <div className="space-y-4">
+                      {profileData.experience.map((exp, index) => (
+                        <div key={index}>
+                          <div className="flex justify-between items-start mb-2">
+                            <div>
+                              <h3 className="font-semibold">{exp.position}</h3>
+                              <p className="text-gray-600">{exp.company}</p>
+                            </div>
+                            <span className="text-sm text-gray-500">{exp.duration}</span>
+                          </div>
+                          <p className="text-gray-700 text-sm">{exp.description}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h2 className="text-xl font-bold text-gray-800 mb-3">Education</h2>
+                    <div>
+                      <h3 className="font-semibold">{profileData.education.degree}</h3>
+                      <p className="text-gray-600">{profileData.education.university}</p>
+                      <p className="text-sm text-gray-500">GPA: {profileData.education.gpa}</p>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h2 className="text-xl font-bold text-gray-800 mb-3">Skills</h2>
+                    <div className="flex flex-wrap gap-2">
+                      {profileData.skills.map((skill, index) => (
+                        <span key={index} className="px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-sm">
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
