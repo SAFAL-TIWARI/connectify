@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -33,7 +34,29 @@ import {
   Award,
   Filter,
   Heart,
-  Share2
+  Share2,
+  TrendingUp,
+  Globe,
+  Lightbulb,
+  Target,
+  Zap,
+  Shield,
+  BookOpen,
+  Network,
+  Rocket,
+  BarChart3,
+  Users2,
+  Handshake,
+  ArrowRight,
+  CheckCircle,
+  PlayCircle,
+  DollarSign,
+  Video,
+  BookOpenCheck,
+  Podcast,
+  Library,
+  Monitor,
+  Quote
 } from 'lucide-react';
 
 // API Key Constant
@@ -240,6 +263,30 @@ const mockJobs = [
   }
 ];
 
+// Hero Background Images
+const heroImages = [
+  {
+    url: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1920&h=1080&fit=crop",
+    alt: "University campus with students walking"
+  },
+  {
+    url: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1920&h=1080&fit=crop",
+    alt: "Professional networking event"
+  },
+  {
+    url: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1920&h=1080&fit=crop",
+    alt: "Business professionals collaborating"
+  },
+  {
+    url: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1920&h=1080&fit=crop",
+    alt: "Modern office environment"
+  },
+  {
+    url: "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=1920&h=1080&fit=crop",
+    alt: "Graduation ceremony celebration"
+  }
+];
+
 // Main Connectify App Component
 const Connectify = () => {
   // Core Navigation State
@@ -273,6 +320,9 @@ const Connectify = () => {
   const [chatInput, setChatInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
 
+  // Hero Image Slider State
+  const [currentHeroImage, setCurrentHeroImage] = useState(0);
+
   // User Profile State for Dashboard
   const [userProfile, setUserProfile] = useState({
     name: 'John Doe',
@@ -287,6 +337,15 @@ const Connectify = () => {
 
   // LinkedIn Integration State
   const [showLinkedInModal, setShowLinkedInModal] = useState(false);
+
+  // Hero Image Slider Effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentHeroImage((prev) => (prev + 1) % heroImages.length);
+    }, 5000); // Change image every 5 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   // Authentication Functions
   const handleLogin = (email, password) => {
@@ -523,21 +582,23 @@ const Connectify = () => {
               </>
             ) : (
               <>
-                <Button 
-                  variant="ghost" 
-                  size="sm"
-                  onClick={() => setShowLoginModal(true)}
-                >
-                  <LogIn className="h-4 w-4 mr-2" />
-                  Login
-                </Button>
-                <Button 
-                  size="sm"
-                  onClick={() => setShowSignUpModal(true)}
-                >
-                  <UserPlus className="h-4 w-4 mr-2" />
-                  Sign Up
-                </Button>
+                <Link to="/login">
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                  >
+                    <LogIn className="h-4 w-4 mr-2" />
+                    Login
+                  </Button>
+                </Link>
+                <Link to="/signup">
+                  <Button 
+                    size="sm"
+                  >
+                    <UserPlus className="h-4 w-4 mr-2" />
+                    Sign Up
+                  </Button>
+                </Link>
               </>
             )}
           </div>
@@ -883,37 +944,585 @@ const Connectify = () => {
 
   // Homepage Component
   const HomePage = () => (
-    <div className="space-y-16">
-      {/* Hero Section */}
-      <section className="bg-gradient-hero text-primary-foreground py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl font-bold mb-6">
-            Connect. Network. Thrive.
+    <div className="space-y-0">
+      {/* Hero Section with Sliding Background */}
+      <section className="hero-background text-white py-32 min-h-screen flex items-center">
+        {/* Background Images */}
+        {heroImages.map((image, index) => (
+          <img
+            key={index}
+            src={image.url}
+            alt={image.alt}
+            className={`hero-image ${index === currentHeroImage ? 'active' : 'inactive'}`}
+          />
+        ))}
+        
+        <div className="hero-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-6xl md:text-7xl font-bold mb-8 leading-tight">
+            Connect. Network. <span className="text-yellow-400">Thrive.</span>
           </h1>
-          <p className="text-xl mb-8 max-w-3xl mx-auto opacity-90">
+          <p className="text-xl md:text-2xl mb-12 max-w-4xl mx-auto opacity-95 leading-relaxed">
             Join thousands of alumni in building meaningful connections, discovering opportunities, and giving back to our community.
           </p>
           {!user ? (
-            <Button
-              size="lg"
-              onClick={() => setShowSignUpModal(true)}
-              className="bg-white text-primary hover:bg-white/90 text-lg px-8 py-3"
-            >
-              Join Our Community
-              <ChevronRight className="ml-2 h-5 w-5" />
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Button
+                size="lg"
+                onClick={() => setShowSignUpModal(true)}
+                className="bg-white text-primary hover:bg-white/90 text-lg px-10 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                Join Our Community
+                <ChevronRight className="ml-2 h-5 w-5" />
+              </Button>
+             
+            </div>
           ) : (
             <Button
               size="lg"
               onClick={() => setCurrentPage('alumni')}
-              className="bg-white text-primary hover:bg-white/90 text-lg px-8 py-3"
+              className="bg-white text-primary hover:bg-white/90 text-lg px-10 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
             >
-              Welcome Back!
+              Welcome Back, {user.name}!
               <ChevronRight className="ml-2 h-5 w-5" />
             </Button>
           )}
         </div>
       </section>
+
+      {/* Platform Statistics */}
+      <section className="py-20 bg-gradient-to-r from-primary/5 to-accent/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="text-center stat-item">
+              <div className="text-4xl md:text-5xl font-bold text-primary mb-2">15K+</div>
+              <div className="text-muted-foreground font-medium">Active Alumni</div>
+            </div>
+            <div className="text-center stat-item">
+              <div className="text-4xl md:text-5xl font-bold text-primary mb-2">500+</div>
+              <div className="text-muted-foreground font-medium">Companies</div>
+            </div>
+            <div className="text-center stat-item">
+              <div className="text-4xl md:text-5xl font-bold text-primary mb-2">1.2K+</div>
+              <div className="text-muted-foreground font-medium">Job Placements</div>
+            </div>
+            <div className="text-center stat-item">
+              <div className="text-4xl md:text-5xl font-bold text-primary mb-2">95%</div>
+              <div className="text-muted-foreground font-medium">Success Rate</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Platform Features */}
+      <section className="py-24 bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">Why Choose Connectify?</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Discover the powerful features that make Connectify the premier platform for alumni networking and career advancement.
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card className="feature-card p-8 text-center border-0 shadow-lg bg-gradient-card">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Network className="h-8 w-8 text-primary" />
+              </div>
+              <h3 className="text-2xl font-bold mb-4">Smart Networking</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                AI-powered matching connects you with alumni who share your interests, career goals, and industry focus.
+              </p>
+            </Card>
+            
+            <Card className="feature-card p-8 text-center border-0 shadow-lg bg-gradient-card">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Rocket className="h-8 w-8 text-primary" />
+              </div>
+              <h3 className="text-2xl font-bold mb-4">Career Acceleration</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Access exclusive job opportunities, mentorship programs, and industry insights from successful alumni.
+              </p>
+            </Card>
+            
+            <Card className="feature-card p-8 text-center border-0 shadow-lg bg-gradient-card">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Shield className="h-8 w-8 text-primary" />
+              </div>
+              <h3 className="text-2xl font-bold mb-4">Trusted Community</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Verified alumni profiles and secure communication ensure authentic, meaningful professional relationships.
+              </p>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* What We Offer */}
+      <section className="py-24 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">What We Offer</h2>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <Card className="p-8 hover:shadow-lg transition-shadow duration-300 bg-white">
+              <div className="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-lg mb-6 mx-auto">
+                <Users className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-bold text-center mb-4">Alumni Directory</h3>
+              <p className="text-muted-foreground text-center leading-relaxed">
+                Connect with classmates and expand your professional network.
+              </p>
+            </Card>
+            
+            <Card className="p-8 hover:shadow-lg transition-shadow duration-300 bg-white">
+              <div className="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-lg mb-6 mx-auto">
+                <Briefcase className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-bold text-center mb-4">Job Board</h3>
+              <p className="text-muted-foreground text-center leading-relaxed">
+                Explore career opportunities exclusively for our alumni.
+              </p>
+            </Card>
+            
+            <Card className="p-8 hover:shadow-lg transition-shadow duration-300 bg-white">
+              <div className="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-lg mb-6 mx-auto">
+                <Calendar className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-bold text-center mb-4">Events & Reunions</h3>
+              <p className="text-muted-foreground text-center leading-relaxed">
+                Stay connected with alumni events and class reunions.
+              </p>
+            </Card>
+            
+            <Card className="p-8 hover:shadow-lg transition-shadow duration-300 bg-white">
+              <div className="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-lg mb-6 mx-auto">
+                <Video className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-bold text-center mb-4">Mentorship Program</h3>
+              <p className="text-muted-foreground text-center leading-relaxed">
+                Give back by mentoring current students or fellow alumni.
+              </p>
+            </Card>
+            
+            <Card className="p-8 hover:shadow-lg transition-shadow duration-300 bg-white">
+              <div className="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-lg mb-6 mx-auto">
+                <BookOpenCheck className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-bold text-center mb-4">Continuing Education</h3>
+              <p className="text-muted-foreground text-center leading-relaxed">
+                Access exclusive courses and workshops for lifelong learning.
+              </p>
+            </Card>
+            
+            <Card className="p-8 hover:shadow-lg transition-shadow duration-300 bg-white">
+              <div className="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-lg mb-6 mx-auto">
+                <DollarSign className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-bold text-center mb-4">Fundraising Campaigns</h3>
+              <p className="text-muted-foreground text-center leading-relaxed">
+                Support your alma mater through various initiatives.
+              </p>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Our Impact */}
+      <section className="py-24 bg-slate-800 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">Our Impact</h2>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="text-center">
+              <div className="flex items-center justify-center w-16 h-16 bg-white/10 rounded-lg mb-6 mx-auto">
+                <GraduationCap className="h-8 w-8 text-white" />
+              </div>
+              <div className="text-4xl font-bold mb-2">50,000+</div>
+              <div className="text-lg text-gray-300">Alumni</div>
+            </div>
+            
+            <div className="text-center">
+              <div className="flex items-center justify-center w-16 h-16 bg-white/10 rounded-lg mb-6 mx-auto">
+                <Globe className="h-8 w-8 text-white" />
+              </div>
+              <div className="text-4xl font-bold mb-2">100+</div>
+              <div className="text-lg text-gray-300">Countries</div>
+            </div>
+            
+            <div className="text-center">
+              <div className="flex items-center justify-center w-16 h-16 bg-white/10 rounded-lg mb-6 mx-auto">
+                <Handshake className="h-8 w-8 text-white" />
+              </div>
+              <div className="text-4xl font-bold mb-2">5,000+</div>
+              <div className="text-lg text-gray-300">Mentorships</div>
+            </div>
+            
+            <div className="text-center">
+              <div className="flex items-center justify-center w-16 h-16 bg-white/10 rounded-lg mb-6 mx-auto">
+                <DollarSign className="h-8 w-8 text-white" />
+              </div>
+              <div className="text-4xl font-bold mb-2">$10M+</div>
+              <div className="text-lg text-gray-300">Raised</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Stay Informed & Engaged */}
+      <section className="py-24 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">Stay Informed & Engaged</h2>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <Card className="p-8 hover:shadow-lg transition-shadow duration-300 bg-white">
+              <div className="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-lg mb-6 mx-auto">
+                <Mail className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-bold text-center mb-4">Alumni Newsletter</h3>
+              <p className="text-muted-foreground text-center leading-relaxed">
+                Get monthly updates on alumni achievements and university news.
+              </p>
+            </Card>
+            
+            <Card className="p-8 hover:shadow-lg transition-shadow duration-300 bg-white">
+              <div className="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-lg mb-6 mx-auto">
+                <Podcast className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-bold text-center mb-4">Alumni Podcast</h3>
+              <p className="text-muted-foreground text-center leading-relaxed">
+                Listen to inspiring stories from successful alumni.
+              </p>
+            </Card>
+            
+            <Card className="p-8 hover:shadow-lg transition-shadow duration-300 bg-white">
+              <div className="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-lg mb-6 mx-auto">
+                <Library className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-bold text-center mb-4">Resource Library</h3>
+              <p className="text-muted-foreground text-center leading-relaxed">
+                Access exclusive e-books, webinars, and career resources.
+              </p>
+            </Card>
+            
+            <Card className="p-8 hover:shadow-lg transition-shadow duration-300 bg-white">
+              <div className="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-lg mb-6 mx-auto">
+                <Monitor className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-bold text-center mb-4">Virtual Events</h3>
+              <p className="text-muted-foreground text-center leading-relaxed">
+                Participate in online networking sessions and workshops.
+              </p>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* What Our Alumni Say */}
+      <section className="py-24 bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">What Our Alumni Say</h2>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card className="p-8 hover:shadow-lg transition-shadow duration-300 bg-white relative">
+              <Quote className="h-8 w-8 text-blue-600 mb-4" />
+              <p className="text-muted-foreground mb-6 leading-relaxed">
+                "The alumni network has been an invaluable resource for my career growth. I've made connections that have led to amazing opportunities."
+              </p>
+              <div className="flex items-center">
+                <Avatar className="h-12 w-12 mr-4">
+                  <AvatarImage src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400" alt="Alumni" />
+                  <AvatarFallback>JD</AvatarFallback>
+                </Avatar>
+                <div>
+                  <div className="font-semibold">John Doe</div>
+                  <div className="text-sm text-muted-foreground">Class of 2010</div>
+                </div>
+              </div>
+            </Card>
+            
+            <Card className="p-8 hover:shadow-lg transition-shadow duration-300 bg-white relative">
+              <Quote className="h-8 w-8 text-blue-600 mb-4" />
+              <p className="text-muted-foreground mb-6 leading-relaxed">
+                "I love attending the alumni events. It's a great way to stay connected with old friends and make new ones in my industry."
+              </p>
+              <div className="flex items-center">
+                <Avatar className="h-12 w-12 mr-4">
+                  <AvatarImage src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400" alt="Alumni" />
+                  <AvatarFallback>JS</AvatarFallback>
+                </Avatar>
+                <div>
+                  <div className="font-semibold">Jane Smith</div>
+                  <div className="text-sm text-muted-foreground">Class of 2015</div>
+                </div>
+              </div>
+            </Card>
+            
+            <Card className="p-8 hover:shadow-lg transition-shadow duration-300 bg-white relative">
+              <Quote className="h-8 w-8 text-blue-600 mb-4" />
+              <p className="text-muted-foreground mb-6 leading-relaxed">
+                "The mentorship program helped me transition into a new career field. I'm grateful for the guidance and support from fellow alumni."
+              </p>
+              <div className="flex items-center">
+                <Avatar className="h-12 w-12 mr-4">
+                  <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400" alt="Alumni" />
+                  <AvatarFallback>AJ</AvatarFallback>
+                </Avatar>
+                <div>
+                  <div className="font-semibold">Alex Johnson</div>
+                  <div className="text-sm text-muted-foreground">Class of 2018</div>
+                </div>
+              </div>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Industry Insights */}
+      <section className="py-24 bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">Industry Insights</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Stay ahead with exclusive insights and trends from our alumni network across various industries.
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Card className="p-6 hover:shadow-lg transition-shadow duration-300">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <Building className="h-6 w-6 text-blue-600" />
+                </div>
+                <Badge variant="secondary">Technology</Badge>
+              </div>
+              <h3 className="font-semibold mb-2">AI Revolution</h3>
+              <p className="text-sm text-muted-foreground">How AI is reshaping the tech industry and creating new opportunities.</p>
+            </Card>
+            
+            <Card className="p-6 hover:shadow-lg transition-shadow duration-300">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                  <TrendingUp className="h-6 w-6 text-green-600" />
+                </div>
+                <Badge variant="secondary">Finance</Badge>
+              </div>
+              <h3 className="font-semibold mb-2">Market Trends</h3>
+              <p className="text-sm text-muted-foreground">Latest financial market trends and investment opportunities.</p>
+            </Card>
+            
+            <Card className="p-6 hover:shadow-lg transition-shadow duration-300">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                  <Lightbulb className="h-6 w-6 text-purple-600" />
+                </div>
+                <Badge variant="secondary">Healthcare</Badge>
+              </div>
+              <h3 className="font-semibold mb-2">Innovation</h3>
+              <p className="text-sm text-muted-foreground">Breakthrough innovations transforming healthcare delivery.</p>
+            </Card>
+            
+            <Card className="p-6 hover:shadow-lg transition-shadow duration-300">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                  <Globe className="h-6 w-6 text-orange-600" />
+                </div>
+                <Badge variant="secondary">Global</Badge>
+              </div>
+              <h3 className="font-semibold mb-2">Remote Work</h3>
+              <p className="text-sm text-muted-foreground">The future of work and global collaboration trends.</p>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Call to Action */}
+      <section className="py-24 bg-gradient-hero text-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">Ready to Transform Your Career?</h2>
+          <p className="text-xl mb-10 opacity-90 leading-relaxed">
+            Join thousands of successful alumni who have accelerated their careers through meaningful connections and opportunities on Connectify.
+          </p>
+          {!user ? (
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Button
+                size="lg"
+                onClick={() => setShowSignUpModal(true)}
+                className="bg-white text-primary hover:bg-white/90 text-lg px-10 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                Start Your Journey
+                <Rocket className="ml-2 h-5 w-5" />
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={() => setCurrentPage('events')}
+                className="border-white text-white hover:bg-white hover:text-primary text-lg px-10 py-4 rounded-full font-semibold transition-all duration-300"
+              >
+                View Events
+                <Calendar className="ml-2 h-5 w-5" />
+              </Button>
+            </div>
+          ) : (
+            <Button
+              size="lg"
+              onClick={() => setCurrentPage('dashboard')}
+              className="bg-white text-primary hover:bg-white/90 text-lg px-10 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              Go to Dashboard
+              <BarChart3 className="ml-2 h-5 w-5" />
+            </Button>
+          )}
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-slate-800 text-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* Quick Links */}
+            <div>
+              <h3 className="text-lg font-semibold mb-6">Quick Links</h3>
+              <ul className="space-y-3">
+                <li>
+                  <button 
+                    onClick={() => setCurrentPage('home')}
+                    className="text-gray-300 hover:text-white transition-colors duration-200"
+                  >
+                    About Us
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => setCurrentPage('home')}
+                    className="text-gray-300 hover:text-white transition-colors duration-200"
+                  >
+                    Contact
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => setCurrentPage('home')}
+                    className="text-gray-300 hover:text-white transition-colors duration-200"
+                  >
+                    FAQ
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => setCurrentPage('home')}
+                    className="text-gray-300 hover:text-white transition-colors duration-200"
+                  >
+                    Privacy Policy
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            {/* Resources */}
+            <div>
+              <h3 className="text-lg font-semibold mb-6">Resources</h3>
+              <ul className="space-y-3">
+                <li>
+                  <button 
+                    onClick={() => setCurrentPage('events')}
+                    className="text-gray-300 hover:text-white transition-colors duration-200"
+                  >
+                    Events Calendar
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => setCurrentPage('career-hub')}
+                    className="text-gray-300 hover:text-white transition-colors duration-200"
+                  >
+                    Job Board
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => setCurrentPage('home')}
+                    className="text-gray-300 hover:text-white transition-colors duration-200"
+                  >
+                    Mentorship Program
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => setCurrentPage('home')}
+                    className="text-gray-300 hover:text-white transition-colors duration-200"
+                  >
+                    Make a Donation
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            {/* Stay Connected */}
+            <div>
+              <h3 className="text-lg font-semibold mb-6">Stay Connected</h3>
+              <ul className="space-y-3">
+                <li className="flex items-center">
+                  <LinkedinIcon className="h-4 w-4 mr-2" />
+                  <button className="text-gray-300 hover:text-white transition-colors duration-200">
+                    LinkedIn
+                  </button>
+                </li>
+                <li className="flex items-center">
+                  <Mail className="h-4 w-4 mr-2" />
+                  <button className="text-gray-300 hover:text-white transition-colors duration-200">
+                    Newsletter
+                  </button>
+                </li>
+                <li className="flex items-center">
+                  <Podcast className="h-4 w-4 mr-2" />
+                  <button className="text-gray-300 hover:text-white transition-colors duration-200">
+                    Podcast
+                  </button>
+                </li>
+                <li className="flex items-center">
+                  <BookOpen className="h-4 w-4 mr-2" />
+                  <button className="text-gray-300 hover:text-white transition-colors duration-200">
+                    Tech Blog
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            {/* Contact Us */}
+            <div>
+              <h3 className="text-lg font-semibold mb-6">Contact Us</h3>
+              <ul className="space-y-3">
+                <li className="flex items-start">
+                  <MapPin className="h-4 w-4 mr-2 mt-1 flex-shrink-0" />
+                  <span className="text-gray-300">123 University Ave, City, State 12345</span>
+                </li>
+                <li className="flex items-center">
+                  <Mail className="h-4 w-4 mr-2 flex-shrink-0" />
+                  <span className="text-gray-300">alumni@university.edu</span>
+                </li>
+                <li className="flex items-center">
+                  <Phone className="h-4 w-4 mr-2 flex-shrink-0" />
+                  <span className="text-gray-300">(123) 456-7890</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Bottom Section */}
+          <div className="border-t border-gray-700 mt-12 pt-8 text-center">
+            <p className="text-gray-400">
+              © 2024 Saanthi. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 

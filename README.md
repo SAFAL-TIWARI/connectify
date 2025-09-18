@@ -1,73 +1,69 @@
-# Welcome to your Lovable project
+# Connectify
 
-## Project info
+Connectify is a modern, feature-rich web application designed to build and foster a strong, interactive community. It serves as a central hub for alumni, students, and professionals to connect, share opportunities, and collaborate.
 
-**URL**: https://lovable.dev/projects/4379a650-7235-44fd-9053-3b1281bf9bc7
+## ✨ Features
 
-## How can I edit this code?
+- **Alumni Directory:** A comprehensive and searchable directory of alumni, making it easy to find and connect with peers.
+- **Events & Campaigns:** Keep track of upcoming events, webinars, and campaigns. Users can create and manage their own events.
+- **Career Opportunities:** A dedicated section for posting and finding job opportunities, internships, and career advice.
+- **Mentorship Program:** A platform for experienced professionals to mentor students and young alumni, fostering growth and knowledge sharing.
+- **AI Assistant:** An intelligent chatbot to assist users in navigating the platform and finding information quickly.
+- **User Profiles:** Rich user profiles with options to showcase skills, experience, and interests.
+- **Secure Authentication:** Robust and secure user authentication system for login and registration.
+- **Responsive Design:** A beautiful and responsive user interface that works on all devices.
 
-There are several ways of editing your application.
+## 🛠️ Tech Stack
 
-**Use Lovable**
+This project is built with a modern and powerful tech stack:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/4379a650-7235-44fd-9053-3b1281bf9bc7) and start prompting.
+- **[Vite](https://vitejs.dev/):** A next-generation frontend tooling that provides a faster and leaner development experience.
+- **[React](https://react.dev/):** A JavaScript library for building user interfaces.
+- **[TypeScript](https://www.typescriptlang.org/):** A typed superset of JavaScript that compiles to plain JavaScript.
+- **[shadcn/ui](https://ui.shadcn.com/):** A collection of re-usable components built using Radix UI and Tailwind CSS.
+- **[Tailwind CSS](https://tailwindcss.com/):** A utility-first CSS framework for rapid UI development.
+- **[React Router](https://reactrouter.com/):** For declarative routing in React applications.
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🚀 Getting Started
 
-**Use your preferred IDE**
+To get a local copy up and running, follow these simple steps.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Prerequisites
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Make sure you have [Node.js](https://nodejs.org/en/) and [npm](https://www.npmjs.com/) (or [Bun](https://bun.sh/)) installed on your machine.
 
-Follow these steps:
+### Installation
 
+1.  **Clone the repository:**
+    ```sh
+    git clone https://github.com/SakarRanat90/connectify.git
+    ```
+2.  **Navigate to the project directory:**
+    ```sh
+    cd connectify
+    ```
+3.  **Install dependencies:**
+    Using npm:
+    ```sh
+    npm install
+    ```
+    Or using Bun:
+    ```sh
+    bun install
+    ```
+
+### Running the Application
+
+To start the development server, run the following command:
+
+Using npm:
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
 npm run dev
 ```
+Or using Bun:
+```sh
+bun dev
+```
 
-**Edit a file directly in GitHub**
+Open [http://localhost:8080](http://localhost:8080) with your browser to see the result.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/4379a650-7235-44fd-9053-3b1281bf9bc7) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
