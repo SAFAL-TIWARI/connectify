@@ -22,9 +22,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
-import { User, Mail, Phone, MapPin, Calendar, Edit, Save, X, Plus, Trash2 } from 'lucide-react';
+import { User, Mail, Phone, MapPin, Calendar, Edit, Save, X, Plus, Trash2, Github, Instagram, Twitter, Facebook, Linkedin, Globe, Link2 } from 'lucide-react';
 
 // Dropdown options
 const professionalTitles = [
@@ -71,7 +76,7 @@ const workYears = Array.from({ length: currentYear - 1980 + 1 }, (_, i) => (curr
 const defaultProfileData = {
   name: 'Rohan Sharma',
   title: 'Software Engineer',
-  graduationYear: '2022',
+  graduationYear: '2025',
   email: 'rohan.sharma@example.com',
   phone: '+91 98765 43210',
   location: 'Bengaluru, KA',
@@ -79,7 +84,7 @@ const defaultProfileData = {
   about: 'Passionate software engineer with 4+ years of experience in full-stack development. Alumni of Computer Science program, currently working at a leading tech company in Bengaluru. Always eager to connect with fellow alumni and share knowledge.',
   currentPosition: 'Senior Software Engineer',
   company: 'Infosys',
-  workStartYear: '2022',
+  workStartYear: '2025',
   workEndYear: 'Present',
   skills: ['Java', 'Spring Boot', 'React', 'Python', 'AWS', 'Docker', 'MySQL', 'TypeScript'],
   education: {
@@ -89,15 +94,15 @@ const defaultProfileData = {
   },
   experience: [
     {
-      position: 'Senior Software Engineer',
+      position: 'Junior Software Engineer',
       company: 'Infosys',
-      duration: '2022 - Present',
+      duration: '2015 - 2019',
       description: 'Lead development of scalable web applications using Spring Boot and React. Mentored junior developers and improved system performance by 40%.'
     },
     {
       position: 'Software Engineer',
       company: 'StartupConnect',
-      duration: '2020 - 2022',
+      duration: '2019 - Present',
       description: 'Developed full-stack applications and implemented CI/CD pipelines. Collaborated with cross-functional teams to deliver high-quality software solutions.'
     }
   ],
@@ -106,7 +111,15 @@ const defaultProfileData = {
     'Implemented automated testing framework that reduced bug reports by 45%',
     'Speaker at NASSCOM Tech Conference 2023 on "Modern Microservices Patterns"',
     'Contributed to open-source projects with 1000+ GitHub stars'
-  ]
+  ],
+  socialProfiles: {
+    github: '',
+    linkedin: '',
+    twitter: '',
+    instagram: '',
+    facebook: '',
+    website: ''
+  }
 };
 
 const Profile = () => {
@@ -114,6 +127,7 @@ const Profile = () => {
   const [profileData, setProfileData] = useState(defaultProfileData);
   const [editData, setEditData] = useState(defaultProfileData);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [openSocialPopover, setOpenSocialPopover] = useState<string | null>(null);
   const { toast } = useToast();
 
   // Load user data from localStorage on component mount
@@ -123,7 +137,7 @@ const Profile = () => {
       if (storedUserData) {
         try {
           const userData = JSON.parse(storedUserData);
-          
+
           // Transform signup data to profile format
           const transformedData = {
             name: userData.fullName || defaultProfileData.name,
@@ -152,9 +166,10 @@ const Profile = () => {
                 description: `Working as ${userData.currentJobTitle} at ${userData.company}`
               }
             ] : defaultProfileData.experience,
-            achievements: defaultProfileData.achievements
+            achievements: defaultProfileData.achievements,
+            socialProfiles: userData.socialProfiles || defaultProfileData.socialProfiles
           };
-          
+
           setProfileData(transformedData);
           setEditData(transformedData);
         } catch (error) {
@@ -189,6 +204,7 @@ const Profile = () => {
           skills: editData.skills.join(', '),
           graduationYear: editData.graduationYear,
           majorField: editData.education.degree.replace('Bachelor of Science in ', ''),
+          socialProfiles: editData.socialProfiles,
         };
         localStorage.setItem('userProfile', JSON.stringify(updatedUserData));
       } catch (error) {
@@ -236,7 +252,7 @@ const Profile = () => {
   const handleExperienceChange = (index: number, field: string, value: string) => {
     setEditData(prev => ({
       ...prev,
-      experience: prev.experience.map((exp, i) => 
+      experience: prev.experience.map((exp, i) =>
         i === index ? { ...exp, [field]: value } : exp
       )
     }));
@@ -259,6 +275,24 @@ const Profile = () => {
       ...prev,
       experience: prev.experience.filter((_, i) => i !== index)
     }));
+  };
+
+  const handleSocialProfileChange = (platform: string, value: string) => {
+    setEditData(prev => ({
+      ...prev,
+      socialProfiles: {
+        ...prev.socialProfiles,
+        [platform]: value
+      }
+    }));
+  };
+
+  const saveSocialProfile = (platform: string) => {
+    setOpenSocialPopover(null);
+    toast({
+      title: "Social Profile Updated",
+      description: `Your ${platform} profile has been saved.`,
+    });
   };
 
   if (!isLoggedIn) {
@@ -500,6 +534,204 @@ const Profile = () => {
                       <p className="text-xs text-muted-foreground">Separate skills with commas</p>
                     </div>
 
+                    {/* Social Profiles Section */}
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-medium">Social Links</h3>
+                      <div className="flex flex-wrap gap-3">
+                        {/* GitHub */}
+                        <Popover open={openSocialPopover === 'github'} onOpenChange={(open) => setOpenSocialPopover(open ? 'github' : null)}>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="h-10 w-10 p-0 rounded-full"
+                            >
+                              <Github className="h-4 w-4" />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-80">
+                            <div className="space-y-3">
+                              <h4 className="font-medium">Add GitHub Profile's link</h4>
+                              <div className="flex items-center space-x-2">
+                                <Github className="h-4 w-4 text-muted-foreground" />
+                                <Input
+                                  placeholder="Your github link"
+                                  value={editData.socialProfiles.github}
+                                  onChange={(e) => handleSocialProfileChange('github', e.target.value)}
+                                />
+                                <Button
+                                  size="sm"
+                                  onClick={() => saveSocialProfile('github')}
+                                >
+                                  Save
+                                </Button>
+                              </div>
+                            </div>
+                          </PopoverContent>
+                        </Popover>
+
+                        {/* LinkedIn */}
+                        <Popover open={openSocialPopover === 'linkedin'} onOpenChange={(open) => setOpenSocialPopover(open ? 'linkedin' : null)}>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="h-10 w-10 p-0 rounded-full"
+                            >
+                              <Linkedin className="h-4 w-4" />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-80">
+                            <div className="space-y-3">
+                              <h4 className="font-medium">Add LinkedIn Profile's link</h4>
+                              <div className="flex items-center space-x-2">
+                                <Linkedin className="h-4 w-4 text-muted-foreground" />
+                                <Input
+                                  placeholder="Your linkedin link"
+                                  value={editData.socialProfiles.linkedin}
+                                  onChange={(e) => handleSocialProfileChange('linkedin', e.target.value)}
+                                />
+                                <Button
+                                  size="sm"
+                                  onClick={() => saveSocialProfile('linkedin')}
+                                >
+                                  Save
+                                </Button>
+                              </div>
+                            </div>
+                          </PopoverContent>
+                        </Popover>
+
+                        {/* Twitter */}
+                        <Popover open={openSocialPopover === 'twitter'} onOpenChange={(open) => setOpenSocialPopover(open ? 'twitter' : null)}>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="h-10 w-10 p-0 rounded-full"
+                            >
+                              <Twitter className="h-4 w-4" />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-80">
+                            <div className="space-y-3">
+                              <h4 className="font-medium">Add Twitter Profile's link</h4>
+                              <div className="flex items-center space-x-2">
+                                <Twitter className="h-4 w-4 text-muted-foreground" />
+                                <Input
+                                  placeholder="Your twitter link"
+                                  value={editData.socialProfiles.twitter}
+                                  onChange={(e) => handleSocialProfileChange('twitter', e.target.value)}
+                                />
+                                <Button
+                                  size="sm"
+                                  onClick={() => saveSocialProfile('twitter')}
+                                >
+                                  Save
+                                </Button>
+                              </div>
+                            </div>
+                          </PopoverContent>
+                        </Popover>
+
+                        {/* Instagram */}
+                        <Popover open={openSocialPopover === 'instagram'} onOpenChange={(open) => setOpenSocialPopover(open ? 'instagram' : null)}>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="h-10 w-10 p-0 rounded-full"
+                            >
+                              <Instagram className="h-4 w-4" />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-80">
+                            <div className="space-y-3">
+                              <h4 className="font-medium">Add Instagram Profile's link</h4>
+                              <div className="flex items-center space-x-2">
+                                <Instagram className="h-4 w-4 text-muted-foreground" />
+                                <Input
+                                  placeholder="Your instagram link"
+                                  value={editData.socialProfiles.instagram}
+                                  onChange={(e) => handleSocialProfileChange('instagram', e.target.value)}
+                                />
+                                <Button
+                                  size="sm"
+                                  onClick={() => saveSocialProfile('instagram')}
+                                >
+                                  Save
+                                </Button>
+                              </div>
+                            </div>
+                          </PopoverContent>
+                        </Popover>
+
+                        {/* Facebook */}
+                        <Popover open={openSocialPopover === 'facebook'} onOpenChange={(open) => setOpenSocialPopover(open ? 'facebook' : null)}>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="h-10 w-10 p-0 rounded-full"
+                            >
+                              <Facebook className="h-4 w-4" />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-80">
+                            <div className="space-y-3">
+                              <h4 className="font-medium">Add Facebook Profile's link</h4>
+                              <div className="flex items-center space-x-2">
+                                <Facebook className="h-4 w-4 text-muted-foreground" />
+                                <Input
+                                  placeholder="Your facebook link"
+                                  value={editData.socialProfiles.facebook}
+                                  onChange={(e) => handleSocialProfileChange('facebook', e.target.value)}
+                                />
+                                <Button
+                                  size="sm"
+                                  onClick={() => saveSocialProfile('facebook')}
+                                >
+                                  Save
+                                </Button>
+                              </div>
+                            </div>
+                          </PopoverContent>
+                        </Popover>
+
+                        {/* Website */}
+                        <Popover open={openSocialPopover === 'website'} onOpenChange={(open) => setOpenSocialPopover(open ? 'website' : null)}>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="h-10 w-10 p-0 rounded-full"
+                            >
+                              <Globe className="h-4 w-4" />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-80">
+                            <div className="space-y-3">
+                              <h4 className="font-medium">Add Website Profile's link</h4>
+                              <div className="flex items-center space-x-2">
+                                <Globe className="h-4 w-4 text-muted-foreground" />
+                                <Input
+                                  placeholder="Your website link"
+                                  value={editData.socialProfiles.website}
+                                  onChange={(e) => handleSocialProfileChange('website', e.target.value)}
+                                />
+                                <Button
+                                  size="sm"
+                                  onClick={() => saveSocialProfile('website')}
+                                >
+                                  Save
+                                </Button>
+                              </div>
+                            </div>
+                          </PopoverContent>
+                        </Popover>
+                      </div>
+                    </div>
+
                     {/* Education Section */}
                     <div className="space-y-4">
                       <h3 className="text-lg font-medium">Education</h3>
@@ -653,6 +885,80 @@ const Profile = () => {
               ))}
             </div>
           </Card>
+
+          {/* Social Profiles Section */}
+          {(profileData.socialProfiles.github || 
+            profileData.socialProfiles.linkedin || 
+            profileData.socialProfiles.twitter || 
+            profileData.socialProfiles.instagram || 
+            profileData.socialProfiles.facebook || 
+            profileData.socialProfiles.website) && (
+            <Card className="p-6">
+              <h2 className="text-xl font-semibold mb-4">Social Links</h2>
+              <div className="flex flex-wrap gap-3">
+                {profileData.socialProfiles.github && (
+                  <a
+                    href={profileData.socialProfiles.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center h-10 w-10 rounded-full border border-border hover:bg-accent hover:text-accent-foreground transition-colors"
+                  >
+                    <Github className="h-4 w-4" />
+                  </a>
+                )}
+                {profileData.socialProfiles.linkedin && (
+                  <a
+                    href={profileData.socialProfiles.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center h-10 w-10 rounded-full border border-border hover:bg-accent hover:text-accent-foreground transition-colors"
+                  >
+                    <Linkedin className="h-4 w-4" />
+                  </a>
+                )}
+                {profileData.socialProfiles.twitter && (
+                  <a
+                    href={profileData.socialProfiles.twitter}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center h-10 w-10 rounded-full border border-border hover:bg-accent hover:text-accent-foreground transition-colors"
+                  >
+                    <Twitter className="h-4 w-4" />
+                  </a>
+                )}
+                {profileData.socialProfiles.instagram && (
+                  <a
+                    href={profileData.socialProfiles.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center h-10 w-10 rounded-full border border-border hover:bg-accent hover:text-accent-foreground transition-colors"
+                  >
+                    <Instagram className="h-4 w-4" />
+                  </a>
+                )}
+                {profileData.socialProfiles.facebook && (
+                  <a
+                    href={profileData.socialProfiles.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center h-10 w-10 rounded-full border border-border hover:bg-accent hover:text-accent-foreground transition-colors"
+                  >
+                    <Facebook className="h-4 w-4" />
+                  </a>
+                )}
+                {profileData.socialProfiles.website && (
+                  <a
+                    href={profileData.socialProfiles.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center h-10 w-10 rounded-full border border-border hover:bg-accent hover:text-accent-foreground transition-colors"
+                  >
+                    <Globe className="h-4 w-4" />
+                  </a>
+                )}
+              </div>
+            </Card>
+          )}
 
           {/* Education Section */}
           <Card className="p-6">

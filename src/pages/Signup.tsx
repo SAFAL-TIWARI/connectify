@@ -215,12 +215,12 @@ const Signup = () => {
         {/* Left Side - Illustration */}
         <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
           {/* Background Image */}
-          <div 
+            <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{
-              backgroundImage: "url('https://img.freepik.com/premium-vector/college-university-students-campus-community-vector-illustration_497046-2521.jpg')"
+              backgroundImage: "url('/src/assets/signup-preview.jpg')"
             }}
-          ></div>
+            ></div>
           
           {/* Dark overlay for better text readability */}
           <div className="absolute inset-0 bg-black/40"></div>
@@ -228,9 +228,7 @@ const Signup = () => {
           {/* Main illustration content */}
           <div className="relative z-10 flex flex-col items-center justify-center w-full p-12 text-center">
             <h1 className="text-4xl font-bold text-white mb-4">Join Our Network</h1>
-            <p className="text-lg text-white/90 max-w-md">
-              Connect with alumni, find opportunities, and grow your career.
-            </p>
+           
           </div>
         </div>
 
