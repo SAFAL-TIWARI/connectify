@@ -47,10 +47,7 @@ Make sure you have [Node.js](https://nodejs.org/en/) and [npm](https://www.npmjs
     ```sh
     npm install
     ```
-    Or using Bun:
-    ```sh
-    bun install
-    ```
+  
 
 ### Running the Application
 
@@ -60,10 +57,8 @@ Using npm:
 ```sh
 npm run dev
 ```
-Or using Bun:
-```sh
-bun dev
-```
+
+
 
 Open [http://localhost:8080](http://localhost:8080) with your browser to see the result.
 
