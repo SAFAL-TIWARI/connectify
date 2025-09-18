@@ -283,7 +283,7 @@ const trendingTopics = [
   { name: '#CodingTips', posts: '756' },
 ];
 
-export default function Sanwad() {
+export default function Samvad() {
   // Tabs and view
   const [activeTab, setActiveTab] = useState<'home' | 'popular' | 'answers'>('popular');
   const [currentView, setCurrentView] = useState<'feed' | 'community' | 'post' | 'search'>('feed');

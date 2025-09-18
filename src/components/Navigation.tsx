@@ -52,7 +52,7 @@ const Navigation = () => {
     { to: '/careers', label: 'Career Hub' },
     { to: '/mentorship', label: 'Mentorship' },
     { to: '/campaigns', label: 'Campaigns' },
-    { to: '/sanwad', label: 'Sanwad' },
+    { to: '/samvad', label: 'Samvad' },
   ];
 
   const handleLogout = () => {
