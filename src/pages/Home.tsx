@@ -413,7 +413,7 @@ const Home = () => {
                 />
                 <div>
                   <div className="font-semibold">Priya Sharma</div>
-                  <div className="text-sm text-muted-foreground">Class of 2018</div>
+                  <div className="text-sm text-muted-foreground">Batch of 2018</div>
                 </div>
               </div>
             </Card>
@@ -431,7 +431,7 @@ const Home = () => {
                 />
                 <div>
                   <div className="font-semibold">Rohan Mehta</div>
-                  <div className="text-sm text-muted-foreground">Class of 2019</div>
+                  <div className="text-sm text-muted-foreground">Batch of 2019</div>
                 </div>
               </div>
             </Card>
@@ -449,7 +449,7 @@ const Home = () => {
                 />
                 <div>
                   <div className="font-semibold">Ananya Gupta</div>
-                  <div className="text-sm text-muted-foreground">Class of 2017</div>
+                  <div className="text-sm text-muted-foreground">Batch of 2017</div>
                 </div>
               </div>
             </Card>

@@ -298,7 +298,7 @@ const Profile = () => {
               </div>
               <div className="flex-1">
                 <h1 className="text-3xl font-bold mb-2">{profileData.name}</h1>
-                <p className="text-muted-foreground mb-4">{profileData.title} | Class of {profileData.graduationYear}</p>
+                <p className="text-muted-foreground mb-4">{profileData.title} | Batch of {profileData.graduationYear}</p>
                 <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
                   <div className="flex items-center">
                     <Mail className="h-4 w-4 mr-2" />

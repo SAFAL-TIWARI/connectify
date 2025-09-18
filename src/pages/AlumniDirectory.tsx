@@ -271,7 +271,7 @@ const AlumniDirectory = () => {
               <div className="space-y-2 mb-4">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <GraduationCap className="h-3 w-3" />
-                  <span>{alumni.major} • Class of {alumni.graduationYear}</span>
+                  <span>{alumni.major} • Batch of {alumni.graduationYear}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <MapPin className="h-3 w-3" />
@@ -411,7 +411,7 @@ const AlumniDirectory = () => {
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       <GraduationCap className="h-4 w-4 text-muted-foreground" />
-                      <span>{selectedAlumni.major} • Class of {selectedAlumni.graduationYear}</span>
+                      <span>{selectedAlumni.major} • Batch of {selectedAlumni.graduationYear}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Building className="h-4 w-4 text-muted-foreground" />

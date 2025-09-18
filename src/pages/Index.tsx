@@ -1242,7 +1242,7 @@ const Connectify = () => {
                 </Avatar>
                 <div>
                   <div className="font-semibold">John Doe</div>
-                  <div className="text-sm text-muted-foreground">Class of 2010</div>
+                  <div className="text-sm text-muted-foreground">Batch of 2010</div>
                 </div>
               </div>
             </Card>
@@ -1259,7 +1259,7 @@ const Connectify = () => {
                 </Avatar>
                 <div>
                   <div className="font-semibold">Jane Smith</div>
-                  <div className="text-sm text-muted-foreground">Class of 2015</div>
+                  <div className="text-sm text-muted-foreground">Batch of 2015</div>
                 </div>
               </div>
             </Card>
@@ -1276,7 +1276,7 @@ const Connectify = () => {
                 </Avatar>
                 <div>
                   <div className="font-semibold">Alex Johnson</div>
-                  <div className="text-sm text-muted-foreground">Class of 2018</div>
+                  <div className="text-sm text-muted-foreground">Batch of 2018</div>
                 </div>
               </div>
             </Card>
@@ -1709,7 +1709,7 @@ const Connectify = () => {
                 <div className="grid md:grid-cols-2 gap-4 text-sm text-muted-foreground mb-4">
                   <p className="flex items-center gap-2">
                     <GraduationCap className="h-4 w-4" />
-                    {selectedAlumni.major} • Class of {selectedAlumni.graduationYear}
+                    {selectedAlumni.major} • Batch of {selectedAlumni.graduationYear}
                   </p>
                   <p className="flex items-center gap-2">
                     <MapPin className="h-4 w-4" />
