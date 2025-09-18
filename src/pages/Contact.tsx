@@ -323,29 +323,6 @@ const Contact = () => {
           </div>
         </div>
       </section>
-
-      {/* Map Section (Optional) */}
-      <section className="py-16 bg-gray-100 dark:bg-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">Visit Our Campus</h2>
-            <p className="text-gray-600 dark:text-gray-400">
-              Located in the heart of the university district, our office is easily accessible.
-            </p>
-          </div>
-          
-          {/* Placeholder for map - you can integrate Google Maps or similar */}
-          <Card className="h-96 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-            <div className="text-center">
-              <MapPin className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500 dark:text-gray-400">Interactive Map Coming Soon</p>
-              <p className="text-sm text-gray-400 dark:text-gray-500 mt-2">
-                123 University Ave, Campus City, CC 12345
-              </p>
-            </div>
-          </Card>
-        </div>
-      </section>
     </div>
   );
 };
