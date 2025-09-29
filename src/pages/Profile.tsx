@@ -29,10 +29,12 @@ import {
 } from '@/components/ui/popover';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
+import type { UserProfile } from '@/types/auth';
 import { User, Mail, Phone, MapPin, Calendar, Edit, Save, X, Plus, Trash2, Github, Instagram, Twitter, Facebook, Linkedin, Globe, Link2, FileText, Trophy, Eye, ChevronRight, Download, Share2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { generateResumePDF, downloadPDF, shareResume, ProfileData } from '@/utils/pdfGenerator';
+import { checkAndCreateProfileColumns, getCreateColumnSQL } from '@/utils/databaseSetup';
 
 // Dropdown options
 const professionalTitles = [
@@ -75,47 +77,57 @@ const graduationYears = Array.from({ length: currentYear + 4 - 1970 + 1 }, (_, i
 // Generate work period years (from 1980 to current year)
 const workYears = Array.from({ length: currentYear - 1980 + 1 }, (_, i) => (currentYear - i).toString());
 
-// Default profile data
-const defaultProfileData = {
-  name: 'Rohan Sharma',
-  title: 'Software Engineer',
-  graduationYear: '2025',
-  email: 'rohan.sharma@example.com',
-  phone: '+91 98765 43210',
-  location: 'Bengaluru, KA',
-  joinDate: 'Joined March 2025',
-  profileImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
-  about: 'Passionate software engineer with 4+ years of experience in full-stack development. Alumni of Computer Science program, currently working at a leading tech company in Bengaluru. Always eager to connect with fellow alumni and share knowledge.',
-  currentPosition: 'Senior Software Engineer',
-  company: 'Infosys',
-  workStartYear: '2025',
+type ProfileView = {
+  name: string;
+  title: string;
+  graduationYear: string;
+  email: string;
+  phone: string;
+  location: string;
+  joinDate: string;
+  profileImage: string;
+  about: string;
+  currentPosition: string;
+  company: string;
+  workStartYear: string;
+  workEndYear: string;
+  skills: string[];
+  education: { degree: string; university: string; gpa: string };
+  experience: Array<{ position: string; company: string; duration: string; description: string }>;
+  achievements: string[];
+  socialProfiles: {
+    github?: string;
+    linkedin?: string;
+    twitter?: string;
+    instagram?: string;
+    facebook?: string;
+    website?: string;
+  };
+}
+
+// Default minimal profile view when missing fields
+const defaultProfileData: ProfileView = {
+  name: '',
+  title: '',
+  graduationYear: '',
+  email: '',
+  phone: '',
+  location: '',
+  joinDate: '',
+  profileImage: '',
+  about: '',
+  currentPosition: '',
+  company: '',
+  workStartYear: '',
   workEndYear: 'Present',
-  skills: ['Java', 'Spring Boot', 'React', 'Python', 'AWS', 'Docker', 'MySQL', 'TypeScript'],
+  skills: [] as string[],
   education: {
-    degree: 'Bachelor of Technology in Computer Science',
-    university: 'IIT Bombay',
-    gpa: '8.8/10.0'
+    degree: '',
+    university: '',
+    gpa: ''
   },
-  experience: [
-    {
-      position: 'Junior Software Engineer',
-      company: 'Infosys',
-      duration: '2015 - 2019',
-      description: 'Lead development of scalable web applications using Spring Boot and React. Mentored junior developers and improved system performance by 40%.'
-    },
-    {
-      position: 'Software Engineer',
-      company: 'StartupConnect',
-      duration: '2019 - Present',
-      description: 'Developed full-stack applications and implemented CI/CD pipelines. Collaborated with cross-functional teams to deliver high-quality software solutions.'
-    }
-  ],
-  achievements: [
-    'Led a team of 5 developers in building a customer portal that increased user engagement by 60%',
-    'Implemented automated testing framework that reduced bug reports by 45%',
-    'Speaker at NASSCOM Tech Conference 2023 on "Modern Microservices Patterns"',
-    'Contributed to open-source projects with 1000+ GitHub stars'
-  ],
+  experience: [] as Array<{ position: string; company: string; duration: string; description: string }>,
+  achievements: [] as string[],
   socialProfiles: {
     github: '',
     linkedin: '',
@@ -127,10 +139,10 @@ const defaultProfileData = {
 };
 
 const Profile = () => {
-  const { isLoggedIn } = useAuth();
+  const { user, profile: dbProfile, updateProfile, uploadProfileImage, loading } = useAuth();
   const navigate = useNavigate();
-  const [profileData, setProfileData] = useState(defaultProfileData);
-  const [editData, setEditData] = useState(defaultProfileData);
+  const [profileData, setProfileData] = useState<ProfileView>(defaultProfileData);
+  const [editData, setEditData] = useState<ProfileView>(defaultProfileData);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [openSocialPopover, setOpenSocialPopover] = useState<string | null>(null);
   const [isResumeDialogOpen, setIsResumeDialogOpen] = useState(false);
@@ -147,94 +159,171 @@ const Profile = () => {
     totalBadges: 4
   };
 
-  // Load user data from localStorage on component mount
+  // Redirect to login if not authenticated (but only after loading is complete)
   useEffect(() => {
-    if (isLoggedIn) {
-      const storedUserData = localStorage.getItem('userProfile');
-      if (storedUserData) {
-        try {
-          const userData = JSON.parse(storedUserData);
+    if (!loading && !user) {
+      // Clear cached profile data when user is not authenticated
+      try {
+        localStorage.removeItem('connectify_profile_cache');
+      } catch (error) {
+        console.log('Error clearing profile cache:', error);
+      }
+      navigate('/login');
+    }
+  }, [user, loading, navigate]);
 
-          // Transform signup data to profile format
-          const transformedData = {
-            name: userData.fullName || defaultProfileData.name,
-            title: userData.currentJobTitle || userData.selectedRole || defaultProfileData.title,
-            graduationYear: userData.graduationYear || defaultProfileData.graduationYear,
-            email: userData.email || defaultProfileData.email,
-            phone: userData.phoneNumber || defaultProfileData.phone,
-            location: userData.city && userData.country ? `${userData.city}, ${userData.country}` : defaultProfileData.location,
-            joinDate: userData.joinDate || defaultProfileData.joinDate,
-            profileImage: userData.profileImage || defaultProfileData.profileImage,
-            about: userData.bio || defaultProfileData.about,
-            currentPosition: userData.currentJobTitle || defaultProfileData.currentPosition,
-            company: userData.company || defaultProfileData.company,
-            workStartYear: defaultProfileData.workStartYear,
-            workEndYear: defaultProfileData.workEndYear,
-            skills: userData.skills ? userData.skills.split(',').map((skill: string) => skill.trim()) : defaultProfileData.skills,
-            education: {
-              degree: userData.majorField ? `Bachelor of Science in ${userData.majorField}` : defaultProfileData.education.degree,
-              university: defaultProfileData.education.university,
-              gpa: defaultProfileData.education.gpa
-            },
-            experience: userData.currentJobTitle && userData.company ? [
-              {
-                position: userData.currentJobTitle,
-                company: userData.company,
-                duration: 'Present',
-                description: `Working as ${userData.currentJobTitle} at ${userData.company}`
-              }
-            ] : defaultProfileData.experience,
-            achievements: defaultProfileData.achievements,
-            socialProfiles: userData.socialProfiles || defaultProfileData.socialProfiles
-          };
+  // Load profile from localStorage on component mount (for faster initial render during refresh)
+  useEffect(() => {
+    try {
+      const cachedProfile = localStorage.getItem('connectify_profile_cache');
+      if (cachedProfile && !profileData.name) {
+        const parsed = JSON.parse(cachedProfile);
+        setProfileData(parsed);
+        setEditData(parsed);
+      }
+    } catch (error) {
+      console.log('No cached profile data or error parsing:', error);
+    }
+  }, []);
 
-          setProfileData(transformedData);
-          setEditData(transformedData);
-        } catch (error) {
-          console.error('Error parsing stored user data:', error);
-        }
+  // Check database compatibility on component mount
+  useEffect(() => {
+    const checkDatabase = async () => {
+      const isCompatible = await checkAndCreateProfileColumns();
+      if (!isCompatible) {
+        console.log('Database setup required. Run this SQL in your Supabase dashboard:');
+        console.log(getCreateColumnSQL());
+        toast({
+          title: "Database Setup Required",
+          description: "Please check the console for SQL commands to run in your Supabase dashboard.",
+          variant: "destructive"
+        });
+      }
+    };
+    
+    if (user) {
+      checkDatabase();
+    }
+  }, [user, toast]);
+
+  // Load profile from Supabase
+  useEffect(() => {
+    if (user && dbProfile) {
+      const transformed = {
+        name: dbProfile.full_name || '',
+        title: dbProfile.current_job_title || dbProfile.role || '',
+        graduationYear: dbProfile.graduation_year || '',
+        email: dbProfile.email || '',
+        phone: dbProfile.phone_number || '',
+        location: dbProfile.city && dbProfile.country ? `${dbProfile.city}, ${dbProfile.country}` : '',
+        joinDate: dbProfile.created_at ? `Joined ${new Date(dbProfile.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}` : '',
+        profileImage: dbProfile.profile_image_url || '',
+        about: dbProfile.bio || '',
+        currentPosition: dbProfile.current_job_title || '',
+        company: dbProfile.company || '',
+        workStartYear: dbProfile.work_start_year || '',
+        workEndYear: dbProfile.work_end_year || 'Present',
+        skills: dbProfile.skills || [],
+        education: dbProfile.education || {
+          degree: dbProfile.major_field ? `Bachelor of Science in ${dbProfile.major_field}` : '',
+          university: '',
+          gpa: '',
+        },
+        experience: (dbProfile.experience as any) || [],
+        achievements: dbProfile.achievements || [],
+        socialProfiles: (dbProfile.social_profiles as ProfileView['socialProfiles']) || defaultProfileData.socialProfiles,
+      } as ProfileView
+      
+      // Always update with fresh data from database
+      setProfileData(transformed)
+      setEditData(transformed)
+      
+      // Cache the profile data for faster loading on refresh
+      try {
+        localStorage.setItem('connectify_profile_cache', JSON.stringify(transformed));
+      } catch (error) {
+        console.log('Error caching profile data:', error);
       }
     }
-  }, [isLoggedIn]);
+  }, [user, dbProfile]);
+
+ 
 
   const handleEditClick = () => {
-    setEditData(profileData); // Initialize edit form with current data
+    // Initialize edit form with current data, ensuring at least one empty entry for experience and achievements if none exist
+    const initData = {
+      ...profileData,
+      experience: profileData.experience.length > 0 ? profileData.experience : [{
+        position: '',
+        company: '',
+        duration: '',
+        description: ''
+      }],
+      achievements: profileData.achievements.length > 0 ? profileData.achievements : ['']
+    };
+    setEditData(initData);
     setIsEditDialogOpen(true);
   };
 
-  const handleSave = () => {
-    setProfileData(editData); // Update the profile with edited data
+  const handleSave = async () => {
+    // Filter out empty experience entries and achievements
+    const filteredExperience = editData.experience.filter(exp => 
+      exp.position.trim() || exp.company.trim() || exp.duration.trim() || exp.description.trim()
+    );
+    const filteredAchievements = editData.achievements.filter(achievement => 
+      achievement.trim()
+    );
+
+    const updatedData = {
+      ...editData,
+      experience: filteredExperience,
+      achievements: filteredAchievements
+    };
+
+    setProfileData(updatedData);
     setIsEditDialogOpen(false);
-
-    // Update localStorage with the new data
-    const storedUserData = localStorage.getItem('userProfile');
-    if (storedUserData) {
-      try {
-        const userData = JSON.parse(storedUserData);
-        const updatedUserData = {
-          ...userData,
-          fullName: editData.name,
-          email: editData.email,
-          phoneNumber: editData.phone,
-          currentJobTitle: editData.currentPosition,
-          company: editData.company,
-          bio: editData.about,
-          skills: editData.skills.join(', '),
-          graduationYear: editData.graduationYear,
-          majorField: editData.education.degree.replace('Bachelor of Science in ', ''),
-          socialProfiles: editData.socialProfiles,
-        };
-        localStorage.setItem('userProfile', JSON.stringify(updatedUserData));
-      } catch (error) {
-        console.error('Error updating stored user data:', error);
+    try {
+      const profileUpdate = {
+        full_name: updatedData.name,
+        email: updatedData.email,
+        phone_number: updatedData.phone,
+        current_job_title: updatedData.currentPosition,
+        company: updatedData.company,
+        bio: updatedData.about,
+        skills: updatedData.skills,
+        graduation_year: updatedData.graduationYear,
+        major_field: updatedData.education.degree?.replace('Bachelor of Science in ', ''),
+        social_profiles: updatedData.socialProfiles as any,
+        work_start_year: updatedData.workStartYear,
+        work_end_year: updatedData.workEndYear,
+        city: updatedData.location.split(',')[0]?.trim(),
+        country: updatedData.location.split(',')[1]?.trim(),
+        education: updatedData.education,
+        experience: updatedData.experience,
+        achievements: updatedData.achievements,
+      } as Partial<UserProfile>;
+      
+      console.log('Saving profile data:', profileUpdate);
+      await updateProfile(profileUpdate);
+      toast({ title: 'Profile Updated', description: 'Your profile has been saved successfully.' })
+    } catch (e: any) {
+      console.error('Profile update error:', e);
+      
+      let errorMessage = 'Could not save your profile.';
+      if (e?.message?.includes('column') && e?.message?.includes('does not exist')) {
+        errorMessage = 'Database columns missing. Please check the console for setup instructions.';
+        console.log('Missing database columns. Run this SQL in your Supabase dashboard:');
+        console.log(getCreateColumnSQL());
+      } else if (e?.message) {
+        errorMessage = e.message;
       }
+      
+      toast({ 
+        title: 'Update failed', 
+        description: errorMessage, 
+        variant: 'destructive' 
+      });
     }
-
-    // Show success toast
-    toast({
-      title: "Profile Updated",
-      description: "Your profile has been saved successfully.",
-    });
   };
 
   const handleCancel = () => {
@@ -292,6 +381,29 @@ const Profile = () => {
     setEditData(prev => ({
       ...prev,
       experience: prev.experience.filter((_, i) => i !== index)
+    }));
+  };
+
+  const handleAchievementChange = (index: number, value: string) => {
+    setEditData(prev => ({
+      ...prev,
+      achievements: prev.achievements.map((achievement, i) =>
+        i === index ? value : achievement
+      )
+    }));
+  };
+
+  const addAchievement = () => {
+    setEditData(prev => ({
+      ...prev,
+      achievements: [...prev.achievements, '']
+    }));
+  };
+
+  const removeAchievement = (index: number) => {
+    setEditData(prev => ({
+      ...prev,
+      achievements: prev.achievements.filter((_, i) => i !== index)
     }));
   };
 
@@ -427,7 +539,7 @@ const Profile = () => {
     navigate('/leaderboard');
   };
 
-  if (!isLoggedIn) {
+  if (!user) {
     return (
       <div className="min-h-screen bg-background">
         <Navigation />
@@ -454,8 +566,7 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Profile Content */}
           <div className="lg:col-span-2 space-y-6">
           {/* Profile Header */}
@@ -570,8 +681,10 @@ const Profile = () => {
                           id="email"
                           type="email"
                           value={editData.email}
-                          onChange={(e) => handleInputChange('email', e.target.value)}
+                          readOnly
+                          disabled
                           placeholder="your.email@example.com"
+                          className="bg-muted cursor-not-allowed"
                         />
                       </div>
                       <div className="space-y-2">
@@ -970,6 +1083,49 @@ const Profile = () => {
                         </div>
                       ))}
                     </div>
+
+                    {/* Achievements Section */}
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-lg font-medium">Achievements</h3>
+                        <Button type="button" variant="outline" size="sm" onClick={addAchievement}>
+                          <Plus className="h-4 w-4 mr-2" />
+                          Add Achievement
+                        </Button>
+                      </div>
+                      {editData.achievements.map((achievement, index) => (
+                        <div key={index} className="border rounded-lg p-4 space-y-4">
+                          <div className="flex items-center justify-between">
+                            <h4 className="font-medium">Achievement {index + 1}</h4>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => removeAchievement(index)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor={`achievement-${index}`}>Achievement</Label>
+                            <Textarea
+                              id={`achievement-${index}`}
+                              value={achievement}
+                              onChange={(e) => handleAchievementChange(index, e.target.value)}
+                              placeholder="Describe your achievement..."
+                              className="min-h-[80px]"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                      {editData.achievements.length === 0 && (
+                        <div className="text-center py-8 text-muted-foreground">
+                          <Trophy className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                          <p>No achievements added yet.</p>
+                          <p className="text-sm">Click "Add Achievement" to get started.</p>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   <DialogFooter>
@@ -1098,42 +1254,48 @@ const Profile = () => {
           )}
 
           {/* Education Section */}
-          <Card className="p-6">
-            <h2 className="text-xl font-semibold mb-4">Education</h2>
-            <div className="space-y-2">
-              <h3 className="font-medium">{profileData.education.degree}</h3>
-              <p className="text-muted-foreground">{profileData.education.university}</p>
-              <p className="text-sm text-muted-foreground">GPA: {profileData.education.gpa}</p>
-            </div>
-          </Card>
+          {(profileData.education.degree || profileData.education.university || profileData.education.gpa) && (
+            <Card className="p-6">
+              <h2 className="text-xl font-semibold mb-4">Education</h2>
+              <div className="space-y-2">
+                {profileData.education.degree && <h3 className="font-medium">{profileData.education.degree}</h3>}
+                {profileData.education.university && <p className="text-muted-foreground">{profileData.education.university}</p>}
+                {profileData.education.gpa && <p className="text-sm text-muted-foreground">GPA: {profileData.education.gpa}</p>}
+              </div>
+            </Card>
+          )}
 
           {/* Experience Section */}
-          <Card className="p-6">
-            <h2 className="text-xl font-semibold mb-4">Professional Experience</h2>
-            <div className="space-y-6">
-              {profileData.experience.map((exp, index) => (
-                <div key={index} className="border-l-2 border-primary/20 pl-4">
-                  <h3 className="font-medium">{exp.position}</h3>
-                  <p className="text-muted-foreground">{exp.company}</p>
-                  <p className="text-sm text-muted-foreground mb-2">{exp.duration}</p>
-                  <p className="text-sm">{exp.description}</p>
-                </div>
-              ))}
-            </div>
-          </Card>
+          {profileData.experience.length > 0 && (
+            <Card className="p-6">
+              <h2 className="text-xl font-semibold mb-4">Professional Experience</h2>
+              <div className="space-y-6">
+                {profileData.experience.map((exp, index) => (
+                  <div key={index} className="border-l-2 border-primary/20 pl-4">
+                    {exp.position && <h3 className="font-medium">{exp.position}</h3>}
+                    {exp.company && <p className="text-muted-foreground">{exp.company}</p>}
+                    {exp.duration && <p className="text-sm text-muted-foreground mb-2">{exp.duration}</p>}
+                    {exp.description && <p className="text-sm">{exp.description}</p>}
+                  </div>
+                ))}
+              </div>
+            </Card>
+          )}
 
           {/* Achievements Section */}
-          <Card className="p-6">
-            <h2 className="text-xl font-semibold mb-4">Key Achievements</h2>
-            <ul className="space-y-3">
-              {profileData.achievements.map((achievement, index) => (
-                <li key={index} className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                  <p className="text-sm">{achievement}</p>
-                </li>
-              ))}
-            </ul>
-          </Card>
+          {profileData.achievements.length > 0 && (
+            <Card className="p-6">
+              <h2 className="text-xl font-semibold mb-4">Key Achievements</h2>
+              <ul className="space-y-3">
+                {profileData.achievements.map((achievement, index) => (
+                  <li key={index} className="flex items-start space-x-3">
+                    <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                    <p className="text-sm">{achievement}</p>
+                  </li>
+                ))}
+              </ul>
+            </Card>
+          )}
           </div>
 
           {/* Right Sidebar */}

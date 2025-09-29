@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/sheet';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/hooks/use-toast';
 import {
   LogIn,
   LogOut,
@@ -31,7 +32,9 @@ import {
 
 const Navigation = () => {
   const location = useLocation();
-  const { isLoggedIn, logout } = useAuth();
+  const { user, signOut, profile } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const isActive = (path: string) => {
@@ -56,9 +59,17 @@ const Navigation = () => {
     { to: '/samvad', label: 'Samvad' },
   ];
 
-  const handleLogout = () => {
-    logout();
-    // Optionally, redirect to home or login page
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      toast({ title: 'Logged out', description: 'You have been signed out.' });
+      navigate('/home');
+    } catch (error) {
+      console.error('Logout error:', error);
+      toast({ title: 'Logout failed', description: 'There was an error signing out.', variant: 'destructive' });
+      // Still navigate to home even if logout fails
+      navigate('/home');
+    }
   };
 
   return (
@@ -133,7 +144,7 @@ const Navigation = () => {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                {isLoggedIn ? (
+                {user ? (
                   <DropdownMenuItem onClick={handleLogout} className="flex items-center cursor-pointer">
                     <LogOut className="h-4 w-4 mr-2" />
                     Log Out
@@ -146,7 +157,12 @@ const Navigation = () => {
                         Login
                       </Link>
                     </DropdownMenuItem>
-                    
+                    <DropdownMenuItem asChild>
+                      <Link to="/signup" className="flex items-center">
+                        <UserPlus className="h-4 w-4 mr-2" />
+                        Sign Up
+                      </Link>
+                    </DropdownMenuItem>
                   </>
                 )}
               </DropdownMenuContent>
@@ -230,12 +246,12 @@ const Navigation = () => {
                     
                     <div className="border-t border-border my-4"></div>
 
-                    {isLoggedIn ? (
+                    {user ? (
                       <div
                         className="flex items-center px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer"
-                        onClick={() => {
-                          handleLogout();
+                        onClick={async () => {
                           setIsMobileMenuOpen(false);
+                          await handleLogout();
                         }}
                       >
                         <LogOut className="h-4 w-4 mr-2" />

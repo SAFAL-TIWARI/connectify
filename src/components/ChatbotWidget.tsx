@@ -31,7 +31,7 @@ const ChatbotWidget = () => {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-50">
+    <div className="fixed bottom-4 right-4 z-40">
       {!isOpen && (
         <Button onClick={toggleChat} size="lg" className="rounded-full w-16 h-16">
           <Bot className="h-8 w-8" />

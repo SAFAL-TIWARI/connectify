@@ -17,15 +17,21 @@ import {
   Linkedin,
   Briefcase,
   BookOpen,
-  Building2
+  Building2,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/hooks/use-toast';
+import EmailConfirmationDialog from '@/components/EmailConfirmationDialog';
+import type { SignupData } from '@/types/auth';
 
 const Signup = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { signUp, loading } = useAuth();
+  const { toast } = useToast();
   const [selectedRole, setSelectedRole] = useState('alumni');
   const [formData, setFormData] = useState({
     fullName: '',
@@ -62,32 +68,43 @@ const Signup = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [error, setError] = useState<string | null>(null);
+  const [showEmailConfirmDialog, setShowEmailConfirmDialog] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Basic validation
+    setError(null);
     if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match!');
+      setError('Passwords do not match!');
       return;
     }
-    
-    // Create user profile data from signup form
-    const userProfileData = {
-      selectedRole,
-      ...formData,
-      joinDate: `Joined ${new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`
-    };
-    
-    // Store user data in localStorage (in a real app, this would be sent to a backend)
-    localStorage.setItem('userProfile', JSON.stringify(userProfileData));
-    
-    console.log('Signup successful:', userProfileData);
-    
-    // Log the user in
-    login();
-
-    // Redirect to profile page
-    navigate('/profile');
+    try {
+      const payload: SignupData = {
+        fullName: formData.fullName,
+        email: formData.email,
+        password: formData.password,
+        role: selectedRole,
+        phoneNumber: formData.phoneNumber,
+        dateOfBirth: formData.dateOfBirth,
+        address: formData.address,
+        city: formData.city,
+        country: formData.country,
+        linkedinProfile: formData.linkedinProfile,
+        graduationYear: formData.graduationYear,
+        majorField: formData.majorField,
+        currentJobTitle: formData.currentJobTitle,
+        company: formData.company,
+        bio: formData.bio,
+        skills: formData.skills,
+      }
+      await signUp(payload.email, payload.password, payload)
+      setShowEmailConfirmDialog(true)
+    } catch (err: any) {
+      setError(err.message ?? 'Failed to sign up')
+      toast({ title: 'Signup failed', description: 'Please try again.', variant: 'destructive' })
+    }
   };
 
   // Define which fields are relevant for each user type
@@ -223,11 +240,11 @@ const Signup = () => {
             ></div>
           
           {/* Dark overlay for better text readability */}
-          <div className="absolute inset-0 bg-black/40"></div>
+          <div className="absolute inset-0 bg-black/40 z-0"></div>
 
           {/* Main illustration content */}
           <div className="relative z-10 flex flex-col items-center justify-center w-full p-12 text-center">
-            <h1 className="text-4xl font-bold text-white mb-4">Join Our Network</h1>
+            <h1 className="text-4xl font-bold text-black mb-4">Join Our Network</h1>
            
           </div>
         </div>
@@ -276,7 +293,10 @@ const Signup = () => {
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-3">
+            <form onSubmit={handleSubmit} className="space-y-3 relative z-10">
+              {error && (
+                <div className="text-sm text-red-600 dark:text-red-400">{error}</div>
+              )}
               {/* Helper function to render fields in optimal layout */}
               {(() => {
                 const relevantFields = getRelevantFields(selectedRole);
@@ -320,26 +340,48 @@ const Signup = () => {
                       <div className="relative">
                         <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                         <Input
-                          type="password"
+                          type={showPassword ? "text" : "password"}
                           placeholder="Password"
                           value={formData.password}
                           onChange={(e) => handleInputChange('password', e.target.value)}
-                          className="pl-10 h-10 border-gray-300 dark:border-gray-600"
+                          className="pl-10 pr-10 h-10 border-gray-300 dark:border-gray-600"
                           required
                         />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+                        >
+                          {showPassword ? (
+                            <EyeOff className="w-4 h-4" />
+                          ) : (
+                            <Eye className="w-4 h-4" />
+                          )}
+                        </button>
                       </div>
                     </div>
                     <div className="space-y-1">
                       <div className="relative">
                         <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                         <Input
-                          type="password"
+                          type={showConfirmPassword ? "text" : "password"}
                           placeholder="Confirm Password"
                           value={formData.confirmPassword}
                           onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
-                          className="pl-10 h-10 border-gray-300 dark:border-gray-600"
+                          className="pl-10 pr-10 h-10 border-gray-300 dark:border-gray-600"
                           required
                         />
+                        <button
+                          type="button"
+                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+                        >
+                          {showConfirmPassword ? (
+                            <EyeOff className="w-4 h-4" />
+                          ) : (
+                            <Eye className="w-4 h-4" />
+                          )}
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -616,9 +658,11 @@ const Signup = () => {
               <div className="pt-4">
                 <Button
                   type="submit"
-                  className="w-full h-10 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg"
+                  className="w-full h-10 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg relative z-10 cursor-pointer"
+                  disabled={loading}
+                  style={{ pointerEvents: 'auto' }}
                 >
-                  Sign Up
+                  {loading ? 'Creating account...' : 'Sign Up'}
                 </Button>
               </div>
 
@@ -635,6 +679,16 @@ const Signup = () => {
           </div>
         </div>
       </div>
+
+      {/* Email Confirmation Dialog */}
+      <EmailConfirmationDialog
+        isOpen={showEmailConfirmDialog}
+        onClose={() => {
+          setShowEmailConfirmDialog(false);
+          navigate('/profile');
+        }}
+        userEmail={formData.email}
+      />
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,11 +12,14 @@ import {
   School, 
   UserCheck,
   Github,
-  Linkedin
+  Linkedin,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/hooks/use-toast';
 
 // Google Icon Component
 const GoogleIcon = ({ className }: { className?: string }) => (
@@ -42,11 +45,14 @@ const GoogleIcon = ({ className }: { className?: string }) => (
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { signIn, signInWithProvider, loading, profile, user, getRememberedCredentials } = useAuth();
   const [selectedRole, setSelectedRole] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { toast } = useToast();
 
   const userRoles = [
     { id: 'alumni', label: 'Alumni', icon: User },
@@ -57,20 +63,79 @@ const Login = () => {
     { id: 'admin', label: 'Admin', icon: UserCheck }
   ];
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log('Login attempt:', { selectedRole, email, password, rememberMe });
-    login();
-    navigate('/profile');
+    setError(null);
+    if (!selectedRole) {
+      setError('Please select a role');
+      return;
+    }
+    try {
+      await signIn(email, password, selectedRole, rememberMe);
+      toast({ title: 'Login successful', description: 'Welcome back!' });
+      navigate('/profile');
+    } catch (err: any) {
+      setError(err.message ?? 'Failed to sign in');
+      // Clear selected role on error to force re-selection
+      if (err.message && err.message.includes('Access denied')) {
+        setSelectedRole('');
+      }
+      toast({ title: 'Login failed', description: err.message || 'Please check your credentials.', variant: 'destructive' });
+    }
   };
 
-  const handleSocialLogin = (provider: string) => {
-    // Handle social login
-    console.log(`Login with ${provider}`);
-    login();
-    navigate('/profile');
+  const handleSocialLogin = async (provider: 'google' | 'github' | 'linkedin') => {
+    setError(null);
+    if (!selectedRole) {
+      setError('Please select a role before continuing with social login');
+      return;
+    }
+    try {
+      // Store selected role in localStorage to validate after OAuth redirect
+      localStorage.setItem('selectedLoginRole', selectedRole);
+      await signInWithProvider(provider);
+      toast({ title: 'Continue with provider', description: 'Complete the OAuth flow in the opened window.' });
+      // Redirect will occur; after return, session listener will navigate
+    } catch (err: any) {
+      setError(err.message ?? 'Failed to start social login');
+      toast({ title: 'Social login failed', description: 'Please try again.', variant: 'destructive' });
+    }
   };
+
+  useEffect(() => {
+    if (profile) {
+      navigate('/profile');
+    }
+  }, [profile, navigate]);
+
+  // Load remembered credentials on component mount
+  useEffect(() => {
+    const remembered = getRememberedCredentials();
+    if (remembered) {
+      setEmail(remembered.email);
+      setSelectedRole(remembered.role);
+      setRememberMe(true);
+    }
+  }, [getRememberedCredentials]);
+
+  // Handle role validation errors after social login redirects
+  useEffect(() => {
+    const checkSocialLoginRoleError = () => {
+      const selectedLoginRole = localStorage.getItem('selectedLoginRole')
+      if (selectedLoginRole && !user && !loading) {
+        // User was signed out due to role mismatch
+        const roleLabel = userRoles.find(role => role.id === selectedLoginRole)?.label || selectedLoginRole
+        setError(`Access denied. Please select the correct role for your account or sign up as ${roleLabel}.`)
+        localStorage.removeItem('selectedLoginRole')
+      }
+    }
+
+    // Check immediately and also after a short delay to handle async auth state changes
+    checkSocialLoginRoleError()
+    const timer = setTimeout(checkSocialLoginRoleError, 1000)
+    
+    return () => clearTimeout(timer)
+  }, [user, loading, userRoles]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -87,7 +152,7 @@ const Login = () => {
         ></div>
         
         {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-black/40"></div>
+        <div className="absolute inset-0 bg-black/40 z-0"></div>
 
         {/* Illustration Content */}
         
@@ -101,7 +166,10 @@ const Login = () => {
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Sign in to your account</h2>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleLogin} className="space-y-4 relative z-10">
+            {error && (
+              <div className="text-sm text-red-600 dark:text-red-400">{error}</div>
+            )}
             {/* Role Selection */}
             <div className="space-y-2">
               <Label htmlFor="role" className="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -145,15 +213,28 @@ const Login = () => {
               <Label htmlFor="password" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 Password
               </Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full h-10"
-                required
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full h-10 pr-10"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
+                </button>
+              </div>
             </div>
 
             {/* Remember Me & Forgot Password */}
@@ -168,7 +249,7 @@ const Login = () => {
                   Remember me
                 </Label>
               </div>
-              <Link to="#" className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300">
+              <Link to="/forgot-password" className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300">
                 Forgot your password?
               </Link>
             </div>
@@ -176,9 +257,11 @@ const Login = () => {
             {/* Sign In Button */}
             <Button
               type="submit"
-              className="w-full h-10 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium"
+              className="w-full h-10 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium relative z-10 cursor-pointer"
+              disabled={loading}
+              style={{ pointerEvents: 'auto' }}
             >
-              Sign In
+              {loading ? 'Signing in...' : 'Sign In'}
             </Button>
           </form>
 
@@ -198,7 +281,8 @@ const Login = () => {
                 type="button"
                 variant="outline"
                 onClick={() => handleSocialLogin('google')}
-                className="w-full flex items-center justify-center gap-2 py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800"
+                className="w-full flex items-center justify-center gap-2 py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 relative z-10 cursor-pointer"
+                style={{ pointerEvents: 'auto' }}
               >
                 <GoogleIcon className="w-5 h-5" />
                 <span className="text-sm font-medium text-gray-900 dark:text-white">Google</span>
@@ -207,7 +291,8 @@ const Login = () => {
                 type="button"
                 variant="outline"
                 onClick={() => handleSocialLogin('github')}
-                className="w-full flex items-center justify-center gap-2 py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800"
+                className="w-full flex items-center justify-center gap-2 py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 relative z-10 cursor-pointer"
+                style={{ pointerEvents: 'auto' }}
               >
                 <Github className="w-5 h-5 text-gray-900 dark:text-white" />
                 <span className="text-sm font-medium text-gray-900 dark:text-white">GitHub</span>
@@ -216,7 +301,8 @@ const Login = () => {
                 type="button"
                 variant="outline"
                 onClick={() => handleSocialLogin('linkedin')}
-                className="w-full flex items-center justify-center gap-2 py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800"
+                className="w-full flex items-center justify-center gap-2 py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 relative z-10 cursor-pointer"
+                style={{ pointerEvents: 'auto' }}
               >
                 <Linkedin className="w-5 h-5 text-blue-700" />
                 <span className="text-sm font-medium text-gray-900 dark:text-white">LinkedIn</span>
